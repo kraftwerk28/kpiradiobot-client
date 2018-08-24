@@ -16,6 +16,13 @@ body {
   }
 }
 
+input[type='date'] {
+  &::-webkit-clear-button {
+    appearance: none;
+    display: none;
+  }
+}
+
 button > span {
   font-family: 'Material Icons';
   font-weight: normal;

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div ref="clickarea"
-      class="progress ml-1 mr-1"
+      class="progress ml-1 mr-1 align-middle"
       draggable="false"
       @mousedown="mDown($event)"
       @mouseup="mUp"

@@ -9,13 +9,15 @@
       </div>
     </div>
 
-    <nav class="navbar navbar-dark bg-primary">
+    <nav class="navbar navbar-dark bg-primary pt-2">
       <a class="navbar-brand"
-        href="#">
+        href="https://t.me/kpiradio_bot"
+        title="Developed by @kraftwerk28">
         KPIRADIOBOT
       </a>
       <Player :paused="paused"
         v-show="playerVisible"
+        :songTitle="songName"
         @toggle-play="togglePlay"
         @close="closePlayer"
         :time="timePlaying"
@@ -30,13 +32,15 @@
     <div class="pl-3 pr-3">
       <div class="row mt-2 mb-2">
         <div class="input-group col-md-4"
-          title="Coming soon...">
+          title="Виберіть день">
           <div class="input-group-prepend">
             <span class="input-group-text material-icons">date_range</span>
           </div>
           <input type="date"
-            class="form-control"
-            disabled />
+            :value="new Date(timeStamp).yyyymmdd()"
+            :max="new Date().yyyymmdd()"
+            @change="setTimeStamp($event)"
+            class="form-control" />
         </div>
 
         <div class="input-group col-md-8">
@@ -44,7 +48,8 @@
             :disabled="searching"
             placeholder="пошук"
             class="form-control"
-            v-model="searchPattern">
+            v-model="searchPattern"
+            @keyup.enter="searching = true">
           <div class="input-group-append">
             <button class="btn"
               :disabled="searchPattern.length < 1"
@@ -101,12 +106,29 @@ import Track from './Track.vue';
 import Player from './Player.vue';
 import Seeker from './ProgressSeeker.vue';
 
+Date.prototype.yyyymmdd = function () {
+  let mm = this.getMonth() + 1; // getMonth() is zero-based
+  let dd = this.getDate();
+
+  return [this.getFullYear(),
+  (mm > 9 ? '' : '0') + mm,
+  (dd > 9 ? '' : '0') + dd
+  ].join('-');
+}
+
+Date.ms = function (str) { // YYYY-MM-DD
+  // console.log(str.slice(0, 4), str.slice(5, 7), str.slice(8, 10));
+  return new Date(+str.slice(0, 4), +str.slice(5, 7) - 1, +str.slice(8, 10));
+}
+
 export default {
   data() {
     return {
+      timeStamp: Date.now(),
+
       loadingSongs: true,
       musicPlaying: false,
-      songsData: {},
+      songsData: [],
 
       loadingSong: false,
       paused: true,
@@ -159,6 +181,12 @@ export default {
       });
       return r;
     },
+    songName() {
+      const song = this.songsData.find(s => s.path === this.currentSongId);
+      if (song) {
+        return (song.artist ? song.artist + ' — ' : '') + song.title;
+      }
+    }
   },
   methods: {
     loadSong(path) {
@@ -173,15 +201,11 @@ export default {
         let xhr = this.mainXHR;
         xhr = new XMLHttpRequest()
 
-        xhr.addEventListener('progress', (e) => {
+        xhr.onprogress = (e) => {
           this.loadProgress =
             Math.round((e.loaded / e.total) * 100);
-        });
+        };
 
-
-        // xhr.onprogress = (e) => {
-
-        // };
 
         xhr.onreadystatechange = (e) => {
           if (xhr.readyState === 4 && xhr.status === 200) {
@@ -259,6 +283,25 @@ export default {
     groupHeader(i) {
       return i < 1 ? 'До першої пари' : 'Після ' + i + ' пари';
     },
+
+    setTimeStamp(e) {
+      this.timeStamp = Date.ms(e.target.value);
+      this.ajaxifySongs(this.timeStamp);
+    },
+    ajaxifySongs(dateTime) {
+      fetch(window.origin + '/history/getday', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: Math.round(dateTime / 1000)
+      })
+        .then(res => res.json())
+        .then(obj => {
+          this.songsData = obj;
+          this.loadingSongs = false;
+        });
+    }
   },
   components: {
     Track,
@@ -266,18 +309,7 @@ export default {
     Seeker
   },
   mounted() {
-    fetch(window.origin + '/history/getday', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: Math.round((Date.now()) / 1000)
-    })
-      .then(res => res.json())
-      .then(obj => {
-        this.songsData = obj;
-        this.loadingSongs = false;
-      });
+    this.ajaxifySongs(Date.now())
   }
 }
 </script>
@@ -290,7 +322,7 @@ export default {
   top: 0px;
   left: 0px;
   right: 0px;
-  height: 5px;
+  height: 10px;
   z-index: 4;
   > .progress-bar {
     transition: all 0.2s;

@@ -6,15 +6,28 @@
     <li id="header"
       class="list-group-item d-flex justify-content-between align-items-center"
       :style="style">
-      <h5>
-        <span class="badge badge-dark">{{playTime}}</span>
-      </h5>
+      <div class="badge badge-dark">
+        <span>
+          {{playTime[0]}} -
+        </span>
+        <span>
+          {{playTime[1]}}
+        </span>
+      </div>
 
-      <h5 class="text-nowrap">
-        {{songTitle}}
-      </h5>
+      <div>
+        <h6 v-if="songInfo.artist.length"
+          class="text-secondary d-inline">
+          {{songArtist}} —
+        </h6>
+        <h5 class="text-nowrap d-inline">
+          {{songTitle}}
+        </h5>
+      </div>
+
       <button class="btn btn-primary"
-        @click="$emit('play')">
+        @click="$emit('play')"
+        title="Грати цю пісню">
         <span v-if="!$parent.paused && $parent.currentSongId === songId">
           pause
         </span>
@@ -25,7 +38,7 @@
 </template>
 
 <script>
-const { date_yyyymmdd, parseDate } = require('../stuff.js');
+import { parseDate } from '../stuff.js';
 
 export default {
   data() {
@@ -41,8 +54,7 @@ export default {
       const start = new Date(this.songInfo.time_start),
         stop = new Date(this.songInfo.time_stop);
 
-      return `${parseDate(start)} - 
-      ${parseDate(stop)}`;
+      return [parseDate(start), parseDate(stop)];
     },
     style() {
       return {
@@ -51,6 +63,9 @@ export default {
     },
     songTitle() {
       return decodeURI(this.songInfo.title);
+    },
+    songArtist() {
+      return decodeURI(this.songInfo.artist);
     }
   },
   mounted() {
@@ -70,13 +85,21 @@ export default {
   transform: translateY(-50px);
 }
 
-*:nth-child(2) {
-  overflow-x: scroll;
-  &::-webkit-scrollbar {
-    display: none;
+li {
+  > div:nth-child(1) {
+    display: flex;
+    flex-flow: row wrap;
+  }
+  > div:nth-child(2) {
+    flex: 1;
+    flex-basis: 400px;
+    overflow-x: scroll;
+    padding-left: 20px;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 }
-
 #header {
   overflow-x: hidden;
 }

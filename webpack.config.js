@@ -1,6 +1,8 @@
 'use strict';
 
 const { VueLoaderPlugin } = require('vue-loader');
+// const HWP = require('html-webpack-plugin');
+// const bap = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: './src/main.js',
@@ -15,11 +17,13 @@ module.exports = {
         loader: 'vue-loader',
         exclude: /node_modules/
       },
+      /*
       {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
       },
+      */
       {
         test: /\.s(c|a)ss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
@@ -28,6 +32,17 @@ module.exports = {
     ]
   },
   plugins: [
-    new VueLoaderPlugin()
-  ]
+    new VueLoaderPlugin(),
+    // new bap()
+  ],
+  devServer: {
+    // hot: true,
+    host: '0.0.0.0',
+    proxy: {
+      '/dist/krb': {
+        target: 'http://kpiradiobot.ga',
+        pathRewrite: { '^/dist/krb': '' }
+      }
+    }
+  }
 }

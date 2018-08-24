@@ -26,10 +26,12 @@
         @volume="setVolume($event)"
         @toggle-volume="toggleVolume"
         @prev-track="prevTrack"
-        @next-track="nextTrack" />
+        @next-track="nextTrack"
+        :playerFixed="playerFixed" />
     </nav>
 
-    <div class="pl-3 pr-3">
+    <div id="tracks"
+      class="pl-2 pr-2">
       <div class="row mt-2 mb-2">
         <div class="input-group col-md-4"
           title="Виберіть день">
@@ -62,7 +64,22 @@
         </div>
       </div>
 
-      <div v-if="!searching && !loadingSongs">
+      <div v-if="loadingSongs"
+        class="text-center"
+        style="text-align: -webkit-center;">
+        <div class="alert alert-dark">
+          Завантаження...
+        </div>
+        <div class="spin-loader"
+          style="margin: auto"></div>
+      </div>
+
+      <div v-else-if="songsData.length === 0"
+        class="alert alert-info text-center">
+        Тут поки що пусто...
+      </div>
+
+      <div v-else-if="!searching && !loadingSongs">
         <ul v-for="(group, i) in splitByPairs"
           :key="i"
           class="list-group">
@@ -91,6 +108,7 @@
           :songInfo="song"
           @play="loadSong(song.path, i)" />
       </ul>
+
       <div v-else-if="searching"
         class="alert alert-warning text-center">
         Нічого не знайдено...
@@ -98,6 +116,13 @@
 
     </div>
 
+    <transition name="scrollup">
+      <button v-if="playerFixed"
+        class="scrollup btn btn-primary"
+        @click="scrollUpFull">
+        <span>arrow_upward</span>
+      </button>
+    </transition>
   </div>
 </template>
 
@@ -144,7 +169,9 @@ export default {
 
       mainXHR: null,
       songs: {},
-      timePlaying: 0
+      timePlaying: 0,
+
+      playerFixed: false
     }
   },
   watch: {
@@ -289,18 +316,23 @@ export default {
       this.ajaxifySongs(this.timeStamp);
     },
     ajaxifySongs(dateTime) {
-      fetch(window.origin + '/history/getday', {
-        method: 'POST',
+      const tm = Math.round(dateTime / 1000);
+      this.loadingSongs = true;
+      fetch(window.origin + '/history/getday/' + tm, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: Math.round(dateTime / 1000)
       })
         .then(res => res.json())
         .then(obj => {
           this.songsData = obj;
           this.loadingSongs = false;
         });
+    },
+
+    scrollUpFull() {
+      window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }
   },
   components: {
@@ -309,7 +341,14 @@ export default {
     Seeker
   },
   mounted() {
-    this.ajaxifySongs(Date.now())
+    this.ajaxifySongs(Date.now());
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50 && !this.playerFixed) {
+        this.playerFixed = true;
+      } else if (window.scrollY <= 50 && this.playerFixed)
+        this.playerFixed = false;
+    });
   }
 }
 </script>
@@ -327,5 +366,51 @@ export default {
   > .progress-bar {
     transition: all 0.2s;
   }
+}
+
+#tracks {
+  overflow-x: hidden;
+}
+
+.spin-loader {
+  width: 50px;
+  height: 50px;
+  background: $primary;
+  border-radius: 10px;
+  animation: r 1s ease 0s infinite;
+  flex-basis: 100%;
+
+  @keyframes r {
+    0% {
+      transform: rotateX(0deg) rotateY(0deg);
+    }
+    50% {
+      transform: rotateX(180deg) rotateY(0deg);
+    }
+    100% {
+      transform: rotateX(180deg) rotateY(180deg);
+    }
+  }
+}
+
+.scrollup {
+  position: fixed;
+  right: 20px;
+  bottom: 10px;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  z-index: 5;
+  box-shadow: 0px 0px 20px $secondary;
+}
+
+.scrollup-enter-active,
+.scrollup-leave-active {
+  transition: transform 0.5s;
+}
+
+.scrollup-enter,
+.scrollup-leave-to {
+  transform: translateY(100px);
 }
 </style>

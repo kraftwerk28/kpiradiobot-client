@@ -52,6 +52,7 @@
           <span>close</span>
         </button>
       </div>
+
     </div>
   </transition>
 </template>
@@ -62,25 +63,21 @@ import Seeker from './ProgressSeeker.vue';
 export default {
   data() {
     return {
-      playerFixed: false
+
     }
   },
   props: {
     paused: Boolean,
     time: Number,
     volume: Number,
-    songTitle: String
+    songTitle: String,
+    playerFixed: Boolean
   },
   components: {
     Seeker
   },
   mounted() {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50 && !this.playerFixed) {
-        this.playerFixed = true;
-      } else if (window.scrollY <= 50 && this.playerFixed)
-        this.playerFixed = false;
-    });
+
   }
 }
 </script>
@@ -140,8 +137,5 @@ export default {
   left: 10px;
   right: 10px;
   z-index: 3;
-}
-
-@media screen {
 }
 </style>

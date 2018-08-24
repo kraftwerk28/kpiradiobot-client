@@ -20,36 +20,35 @@ function getPostData(request) {
 
 const server = http.createServer((req, res) => {
   if (req.url.startsWith('/krb')) {
-    if (req.method === 'POST' || true) {
 
-      getPostData(req).then(postdata => {
-        const proxyUrl = req.url.slice(4);
-        // console.log('remote path:', proxyUrl);
-        const proxy = http.request({
-          method: req.method,
-          host: 'kpiradiobot.ga',
-          port: '80',
-          path: proxyUrl,
-          headers: {
-            'Content-Type': '*/*',
-          }
-        }, (_res) => {
-          res.setHeader('Content-Length', _res.headers['content-length']);
-          _res.on('data', (c) => {
-            res.write(c);
-          });
-          _res.on('end', () => {
-            res.end();
-          });
-          // getPostData(_res).then(data => {
-          //   res.statusCode = 200;
-          //   res.end(data);
-          // })
+    console.log(req.url);
+    getPostData(req).then(postdata => {
+      const proxyUrl = req.url.slice(4);
+      console.log('remote path:', proxyUrl);
+      const proxy = http.request({
+        method: req.method,
+        host: 'kpiradiobot.ga',
+        port: '80',
+        path: proxyUrl,
+        headers: {
+          'Content-Type': req.headers['content-type'],
+        }
+      }, (_res) => {
+        res.setHeader('Content-Length', _res.headers['content-length']);
+        _res.on('data', (c) => {
+          res.write(c);
         });
-        // console.log(postdata);
-        proxy.end(req.method === 'POST' && postdata);
+        _res.on('end', () => {
+          res.end();
+        });
+        // getPostData(_res).then(data => {
+        //   res.statusCode = 200;
+        //   res.end(data);
+        // })
       });
-    }
+      // console.log(postdata);
+      proxy.end(req.method === 'POST' && postdata);
+    });
 
   } else {
     const path = req.url === '/' ? './dist/index.html' : './dist/' + req.url;
@@ -57,6 +56,5 @@ const server = http.createServer((req, res) => {
       res.end(data);
     });
   }
-  // console.log(req.url);
 
 }).listen(8081);

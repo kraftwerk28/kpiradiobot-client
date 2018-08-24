@@ -34,7 +34,7 @@ const server = http.createServer((req, res) => {
             'Content-Type': '*/*',
           }
         }, (_res) => {
-          res.setHeader('content-length', _res.headers['content-length']);
+          res.setHeader('Content-Length', _res.headers['content-length']);
           _res.on('data', (c) => {
             res.write(c);
           });

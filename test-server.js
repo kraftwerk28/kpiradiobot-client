@@ -3,10 +3,60 @@
 const http = require('http');
 const fs = require('fs');
 
-const server = http.createServer((req, res) => {
-  console.log(req.url);
-  const path = req.url === '/' ? './dist/index.html' : './dist/' + req.url;
-  fs.readFile(path, (err, data) => {
-    res.end(data);
+const router = {
+  '/': () => './dist/index.html',
+};
+
+function getPostData(request) {
+  return new Promise((resolve, reject) => {
+    let data = ''
+    request.on('data', (c) => {
+      data += c;
+    });
+    request.on('error', (err) => reject(err));
+    request.on('end', () => { resolve(data) });
   });
+};
+
+const server = http.createServer((req, res) => {
+  if (req.url.startsWith('/krb')) {
+    if (req.method === 'POST' || true) {
+
+      getPostData(req).then(postdata => {
+        const proxyUrl = req.url.slice(4);
+        // console.log('remote path:', proxyUrl);
+        const proxy = http.request({
+          method: req.method,
+          host: 'kpiradiobot.ga',
+          port: '80',
+          path: proxyUrl,
+          headers: {
+            'Content-Type': '*/*',
+          }
+        }, (_res) => {
+          res.setHeader('content-length', _res.headers['content-length']);
+          _res.on('data', (c) => {
+            res.write(c);
+          });
+          _res.on('end', () => {
+            res.end();
+          });
+          // getPostData(_res).then(data => {
+          //   res.statusCode = 200;
+          //   res.end(data);
+          // })
+        });
+        // console.log(postdata);
+        proxy.end(req.method === 'POST' && postdata);
+      });
+    }
+
+  } else {
+    const path = req.url === '/' ? './dist/index.html' : './dist/' + req.url;
+    fs.readFile(path, (err, data) => {
+      res.end(data);
+    });
+  }
+  // console.log(req.url);
+
 }).listen(8081);

@@ -1,4 +1,5 @@
-window.origin = 'http://kpiradiobot.ga';
+window.origin = 'krb';
+// window.origin = 'http://kpiradiobot.ga';
 
 import Vue from 'vue';
 import App from './components/App.vue';

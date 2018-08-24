@@ -171,12 +171,17 @@ export default {
       } else {
 
         let xhr = this.mainXHR;
-        xhr = new XMLHttpRequest();
+        xhr = new XMLHttpRequest()
 
-        xhr.onprogress = (e) => {
+        xhr.addEventListener('progress', (e) => {
           this.loadProgress =
             Math.round((e.loaded / e.total) * 100);
-        };
+        });
+
+
+        // xhr.onprogress = (e) => {
+
+        // };
 
         xhr.onreadystatechange = (e) => {
           if (xhr.readyState === 4 && xhr.status === 200) {
@@ -252,7 +257,7 @@ export default {
     },
 
     groupHeader(i) {
-      return i < 1 ? 'До первой пары' : 'После ' + i + ' пары';
+      return i < 1 ? 'До першої пари' : 'Після ' + i + ' пари';
     },
   },
   components: {

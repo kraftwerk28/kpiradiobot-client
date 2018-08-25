@@ -3,10 +3,6 @@
 const http = require('http');
 const fs = require('fs');
 
-const router = {
-  '/': () => './dist/index.html',
-};
-
 function getPostData(request) {
   return new Promise((resolve, reject) => {
     let data = ''
@@ -21,10 +17,9 @@ function getPostData(request) {
 const server = http.createServer((req, res) => {
   if (req.url.startsWith('/krb')) {
 
-    console.log(req.url);
     getPostData(req).then(postdata => {
       const proxyUrl = req.url.slice(4);
-      console.log('remote path:', proxyUrl);
+
       const proxy = http.request({
         method: req.method,
         host: 'kpiradiobot.ga',
@@ -41,12 +36,8 @@ const server = http.createServer((req, res) => {
         _res.on('end', () => {
           res.end();
         });
-        // getPostData(_res).then(data => {
-        //   res.statusCode = 200;
-        //   res.end(data);
-        // })
       });
-      // console.log(postdata);
+
       proxy.end(req.method === 'POST' && postdata);
     });
 

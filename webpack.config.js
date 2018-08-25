@@ -2,13 +2,15 @@
 
 const { VueLoaderPlugin } = require('vue-loader');
 const HWP = require('html-webpack-plugin');
-// const bap = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const cssExtracter = require('mini-css-extract-plugin');
+const cssOptimizer = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
+  mode: 'production',
   entry: './src/main.js',
   output: {
     path: __dirname + '/dist',
-    filename: 'bundle.js'
+    filename: '[name].js'
   },
   module: {
     rules: [
@@ -17,17 +19,14 @@ module.exports = {
         loader: 'vue-loader',
         exclude: /node_modules/
       },
-      /*
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        exclude: /node_modules/
-      },
-      */
-      {
-        test: /\.s(c|a)ss$/,
-        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
-        exclude: /node_modules/
+        test: /\.scss$/,
+        exclude: /node_modules/,
+        use: [
+          cssExtracter.loader,
+          'css-loader',
+          'sass-loader'
+        ]
       }
     ]
   },
@@ -35,9 +34,14 @@ module.exports = {
     new VueLoaderPlugin(),
     new HWP({
       template: './src/index.html',
-      inject: 'body'
+      inject: 'body',
+      minify: true
     }),
-    // new bap()
+    new cssExtracter({
+      filename: '[name].css',
+      chunkFilename: '[id].css'
+    }),
+    new cssOptimizer({})
   ],
   devServer: {
     // hot: true,

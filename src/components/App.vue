@@ -2,7 +2,7 @@
   <div class="container-fluid p-0">
     <div id="loadIndicator"
       class="progress bg-transparent"
-      v-if="loadProgress > 0">
+      v-show="loadProgress > 0">
       <div class="progress-bar bg-danger"
         role="progressbar"
         :style="{ width: loadProgress + '%' }">

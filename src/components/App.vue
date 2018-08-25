@@ -362,7 +362,7 @@ export default {
   left: 0px;
   right: 0px;
   height: 10px;
-  z-index: 4;
+  z-index: 20;
   > .progress-bar {
     transition: all 0.2s;
   }

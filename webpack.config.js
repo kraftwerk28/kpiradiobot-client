@@ -1,7 +1,7 @@
 'use strict';
 
 const { VueLoaderPlugin } = require('vue-loader');
-// const HWP = require('html-webpack-plugin');
+const HWP = require('html-webpack-plugin');
 // const bap = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
@@ -26,13 +26,17 @@ module.exports = {
       */
       {
         test: /\.s(c|a)ss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: ['vue-style-loader', 'css-loader', 'sass-loader'],
         exclude: /node_modules/
       }
     ]
   },
   plugins: [
     new VueLoaderPlugin(),
+    new HWP({
+      template: './src/index.html',
+      inject: 'body'
+    }),
     // new bap()
   ],
   devServer: {

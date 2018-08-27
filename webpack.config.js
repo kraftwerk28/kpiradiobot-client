@@ -23,7 +23,8 @@ module.exports = {
         test: /\.scss$/,
         exclude: /node_modules/,
         use: [
-          cssExtracter.loader,
+          process.env.NODE_ENV !== 'production' ? 'style-loader' :
+            cssExtracter.loader,
           'css-loader',
           'sass-loader'
         ]
@@ -38,19 +39,20 @@ module.exports = {
       minify: true
     }),
     new cssExtracter({
-      filename: '[name].css',
-      chunkFilename: '[id].css'
+      filename: '[name].css'
     }),
     new cssOptimizer({})
   ],
   devServer: {
     // hot: true,
     host: '0.0.0.0',
-    port: '8080',
+    port: '8081',
+    openPage: './dist/index.html',
+    overlay: true,
     proxy: {
-      '/dist/krb': {
+      '/krb': {
         target: 'http://kpiradiobot.ga',
-        pathRewrite: { '^/dist/krb': '' }
+        pathRewrite: { '^/krb': '' }
       }
     }
   }

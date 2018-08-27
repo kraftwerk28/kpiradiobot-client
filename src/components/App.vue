@@ -225,6 +225,24 @@ export default {
         this.playSong(path);
       } else {
 
+        // const audio = new Audio();
+        // audio.src = window.origin + '/history/play2/' + path;
+
+        // audio.onprogress = (e) => {
+        //   console.log('loading...', audio.buffered.end(0) / audio.duration);
+        //   this.loadProgress =
+        //     Math.round((e.loaded / e.total) * 100);
+        // };
+
+        // audio.onload = (e) => {
+        //   console.log('can play');
+        //   this.playSong(path);
+        // };
+
+        // this.songs[path] = audio;
+        // this.loadProgress = 0;
+
+
         let xhr = this.mainXHR;
         xhr = new XMLHttpRequest()
 

@@ -71,7 +71,10 @@
           Завантаження...
         </div>
         <div class="spin-loader"
-          style="margin: auto"></div>
+          style="margin: auto">
+          <img src="../assets/ebalo-bota.png"
+            alt="">
+        </div>
       </div>
 
       <div v-else-if="songsData.length === 0"
@@ -128,7 +131,7 @@
 
     <transition name="scrollup">
       <button v-if="playerFixed"
-        class="scrollup btn btn-primary"
+        class="scrollup btn btn-dark"
         @click="scrollUpFull">
         <span>arrow_upward</span>
       </button>
@@ -140,7 +143,8 @@
 import Track from './Track.vue';
 import Player from './Player.vue';
 import Seeker from './ProgressSeeker.vue';
-import kpi from '../assets/kpi.png';
+import '../assets/kpi.png';
+import '../assets/ebalo-bota.png';
 
 Date.prototype.yyyymmdd = function () {
   let mm = this.getMonth() + 1; // getMonth() is zero-based
@@ -247,7 +251,6 @@ export default {
         // };
 
         audio.onloadeddata = (e) => {
-          console.log('can play');
           this.playSong(path);
         };
 
@@ -402,23 +405,26 @@ export default {
   overflow-x: hidden;
 }
 
-.spin-loader {
-  width: 50px;
-  height: 50px;
-  background: $primary;
+.spin-loader > img {
+  width: 100px;
+  height: 100px;
+  // background: $primary;
   border-radius: 10px;
   animation: r 1s ease 0s infinite;
   flex-basis: 100%;
 
   @keyframes r {
     0% {
-      transform: rotateX(0deg) rotateY(0deg);
+      transform: rotate(0deg) scale(1);
+    }
+    25% {
+      transform: rotate(0deg) scale(1.2);
     }
     50% {
-      transform: rotateX(180deg) rotateY(0deg);
+      transform: rotate(0deg) scale(1);
     }
     100% {
-      transform: rotateX(180deg) rotateY(180deg);
+      transform: rotate(360deg) scale(1);
     }
   }
 }

@@ -9,9 +9,12 @@
         </button>
         <button class="btn btn-secondary"
           @click="$emit('toggle-play')">
-          <transition>
-            <span v-if="paused">play_arrow</span>
-            <span v-else>pause</span>
+          <transition name="play-pause"
+            mode="out-in">
+            <span v-if="paused"
+              :key="1">play_arrow</span>
+            <span v-else
+              :key="2">pause</span>
           </transition>
         </button>
         <button class="btn btn-secondary"
@@ -137,5 +140,14 @@ export default {
   left: 10px;
   right: 10px;
   z-index: 3;
+}
+
+.play-pause-leave-active {
+  transition: transform 0.2s, opacity .2s;
+  z-index: 10;
+}
+.play-pause-leave-to {
+  transform: scale(10);
+  opacity: 0;
 }
 </style>

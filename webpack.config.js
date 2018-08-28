@@ -20,7 +20,7 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.png$/,
+        test: /\.(png|jpe?g)$/,
         loader: 'file-loader',
         exclude: /node_modules/
       },

@@ -16,7 +16,7 @@
         </span>
       </div>
 
-      <div>
+      <div class="head-scroll">
         <h6 v-if="songInfo.artist.length"
           class="text-secondary d-inline">
           {{songArtist}} —
@@ -26,11 +26,16 @@
         </h5>
       </div>
 
-      <a class="btn btn-secondary"
+      <a class="btn btn-secondary btn-sm p-0 border-dark mr-1"
         role="button"
         :href="'/krb/history/play2/' + songId"
         :download="songId + '.mp3'">
-        <span class="material-icons align-middle">file_download</span>
+        <span class="medium material-icons align-middle">file_download</span>
+      </a>
+      <a class="btn btn-secondary btn-sm p-0 telegram-logo border-dark mr-1"
+        role="button"
+        :href="'https://telegram.me/kpiradio_bot?start=' + songId">
+        <span class="medium material-icons align-middle">file_download</span>
       </a>
       <button class="btn btn-primary"
         @click="$emit('play')"
@@ -46,6 +51,7 @@
 
 <script>
 import { parseDate } from '../stuff.js';
+import '../assets/telegram-logo.png';
 
 export default {
   data() {
@@ -107,7 +113,17 @@ li {
     }
   }
 }
+
 #header {
   overflow-x: hidden;
+}
+.telegram-logo {
+  background-image: url("../assets/telegram-logo.png");
+  background-size: 20px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  > span {
+    opacity: 0;
+  }
 }
 </style>

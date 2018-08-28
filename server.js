@@ -35,7 +35,7 @@ const server = http.createServer((req, res) => {
         if (isAudio) {
           res.setHeader('Content-Disposition', 'inline; filename="kpiradiobot.mp3"');
             res.setHeader('Accept-Ranges', 'bytes');
-          //   res.setHeader('Content-Range', 'bytes */' + _res.headers['content-length']);
+            res.setHeader('Content-Range', 'bytes */' + _res.headers['content-length']);
         }
         _res.on('data', (c) => {
           res.write(c);

@@ -60,7 +60,7 @@ module.exports = {
     openPage: './dist/index.html',
     overlay: true,
     headers: {
-      'Content-Disposition': 'inline'
+      // 'Content-Disposition': 'inline'
     },
     proxy: {
       '/krb': {

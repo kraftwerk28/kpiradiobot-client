@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="align-items-center">
         <span>{{songTitle}}</span>
         <button class="btn btn-danger"
           @click="$emit('close')">

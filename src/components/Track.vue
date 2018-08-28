@@ -5,6 +5,7 @@
     appear>
     <li id="header"
       class="list-group-item d-flex justify-content-between align-items-center"
+      :class="{ 'bg-light': $parent.currentSongId === songId }"
       :style="style">
       <div class="badge badge-dark">
         <span>
@@ -25,11 +26,12 @@
         </h5>
       </div>
 
-      <!-- <button class="btn btn-primary"
-        :href="'/krb/download/' + songId"
+      <a class="btn btn-secondary"
+        role="button"
+        :href="'/krb/history/play2/' + songId"
         :download="songId + '.mp3'">
-        <span>file_download</span>
-      </button> -->
+        <span class="material-icons align-middle">file_download</span>
+      </a>
       <button class="btn btn-primary"
         @click="$emit('play')"
         title="Грати цю пісню">

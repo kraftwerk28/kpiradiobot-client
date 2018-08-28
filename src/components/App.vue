@@ -83,11 +83,11 @@
         <ul v-for="(group, i) in splitByPairs"
           :key="i"
           class="list-group">
-          <li class="list-group-item bg-info text-white text-center align-middle mt-3">
+          <li class="list-group-item bg-dark text-white text-center align-middle mt-3">
             <h3>
-              <span class="material-icons">arrow_downward</span>
+              <span class="material-icons align-middle">arrow_downward</span>
               {{groupHeader(i)}}
-              <span class="material-icons">arrow_downward</span>
+              <span class="material-icons align-middle">arrow_downward</span>
             </h3>
           </li>
           <Track v-for="(song, i) in group"
@@ -115,6 +115,16 @@
       </div>
 
     </div>
+    <footer v-if="!loadingSongs"
+      class="footer pt-5 pb-4 text-center font-weight-bold">
+      <img src="../assets/kpi.png"
+        alt=""
+        width="40"
+        height="40"> Для КПИ by
+      <a href="https://t.me/svinerus">@svinerus</a>
+      &
+      <a href="https://t.me/kraftwerk28">@kraftwerk28</a>
+    </footer>
 
     <transition name="scrollup">
       <button v-if="playerFixed"
@@ -130,6 +140,7 @@
 import Track from './Track.vue';
 import Player from './Player.vue';
 import Seeker from './ProgressSeeker.vue';
+import kpi from '../assets/kpi.png';
 
 Date.prototype.yyyymmdd = function () {
   let mm = this.getMonth() + 1; // getMonth() is zero-based

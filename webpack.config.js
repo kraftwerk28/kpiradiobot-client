@@ -15,6 +15,16 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /\.png$/,
+        loader: 'file-loader',
+        exclude: /node_modules/
+      },
+      {
         test: /\.vue$/,
         loader: 'vue-loader',
         exclude: /node_modules/
@@ -50,7 +60,7 @@ module.exports = {
     openPage: './dist/index.html',
     overlay: true,
     headers: {
-      'Accept-Ranges': 'bytes'
+      'Content-Disposition': 'inline'
     },
     proxy: {
       '/krb': {

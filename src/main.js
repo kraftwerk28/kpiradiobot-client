@@ -4,6 +4,13 @@ window.origin = 'krb';
 import Vue from 'vue';
 import App from './components/App.vue';
 
+window.addEventListener('error', (msg, url, line, column) => {
+  fetch('/err', {
+    body: `${new Date()}%0A${navigator.userAgent}%0A%09${line}:${column}%09${msg}%0A%0A`,
+    method: 'POST',
+  });
+})
+
 window.vm = new Vue({
   el: '#zalupa',
   render(h) {

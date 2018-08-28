@@ -254,6 +254,10 @@ export default {
           this.playSong(path);
         };
 
+        audio.onended = () => {
+          this.nextTrack();
+        }
+
         this.songs[path] = audio;
         this.loadProgress = 0;
 

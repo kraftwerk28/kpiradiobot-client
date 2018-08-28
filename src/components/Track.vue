@@ -28,12 +28,14 @@
 
       <a class="btn btn-secondary btn-sm p-0 border-dark mr-1"
         role="button"
+        title="Завантажити"
         :href="'/krb/history/play2/' + songId"
         :download="songId + '.mp3'">
         <span class="medium material-icons align-middle">file_download</span>
       </a>
       <a class="btn btn-secondary btn-sm p-0 telegram-logo border-dark mr-1"
         role="button"
+        title="відкрити в Telegram"
         :href="'https://telegram.me/kpiradio_bot?start=' + songId">
         <span class="medium material-icons align-middle">file_download</span>
       </a>

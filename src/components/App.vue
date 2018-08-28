@@ -225,44 +225,45 @@ export default {
         this.playSong(path);
       } else {
 
-        // const audio = new Audio();
-        // audio.src = window.origin + '/history/play2/' + path;
+        const audio = new Audio();
+        audio.src = window.origin + '/history/play2/' + path;
+        audio.load();
 
         // audio.onprogress = (e) => {
         //   console.log('loading...', audio.buffered.end(0) / audio.duration);
         //   this.loadProgress =
+        //     Math.round((audio.buffered.end(0) / audio.duration) * 100);
+        // };
+
+        audio.onloadeddata = (e) => {
+          console.log('can play');
+          this.playSong(path);
+        };
+
+        this.songs[path] = audio;
+        this.loadProgress = 0;
+
+
+        // let xhr = this.mainXHR;
+        // xhr = new XMLHttpRequest()
+
+        // xhr.onprogress = (e) => {
+        //   this.loadProgress =
         //     Math.round((e.loaded / e.total) * 100);
         // };
 
-        // audio.onload = (e) => {
-        //   console.log('can play');
-        //   this.playSong(path);
+
+        // xhr.onreadystatechange = (e) => {
+        //   if (xhr.readyState === 4 && xhr.status === 200) {
+        //     this.songs[path] = new Audio(xhr.responseText);
+        //     this.playSong(path);
+        //     this.loadProgress = 0;
+        //   }
         // };
 
-        // this.songs[path] = audio;
-        // this.loadProgress = 0;
-
-
-        let xhr = this.mainXHR;
-        xhr = new XMLHttpRequest()
-
-        xhr.onprogress = (e) => {
-          this.loadProgress =
-            Math.round((e.loaded / e.total) * 100);
-        };
-
-
-        xhr.onreadystatechange = (e) => {
-          if (xhr.readyState === 4 && xhr.status === 200) {
-            this.songs[path] = new Audio(xhr.responseText);
-            this.playSong(path);
-            this.loadProgress = 0;
-          }
-        };
-
-        xhr.open('GET', window.origin + '/history/play/' + path);
-        xhr.setRequestHeader('Content-Type', 'text/plain');
-        xhr.send();
+        // xhr.open('GET', window.origin + '/history/play2/' + path);
+        // xhr.setRequestHeader('Content-Type', 'text/plain');
+        // xhr.send();
       }
     },
     playSong(id) {

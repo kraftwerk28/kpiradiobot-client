@@ -16,20 +16,26 @@ function getPostData(request) {
 
 const server = http.createServer((req, res) => {
   if (req.url.startsWith('/krb')) {
+    // proxying...
+
+    const proxyUrl = req.url.slice(4);
+    const isAudio = proxyUrl.includes('/play2');
 
     getPostData(req).then(postdata => {
-      const proxyUrl = req.url.slice(4);
-
       const proxy = http.request({
         method: req.method,
         host: 'kpiradiobot.ga',
         port: '80',
         path: proxyUrl,
         headers: {
-          'Content-Type': req.headers['content-type'],
+          'Content-Type': req.headers['content-type'] ? req.headers['content-type'] : '*/*',
         }
       }, (_res) => {
         res.setHeader('Content-Length', _res.headers['content-length']);
+        if (isAudio) {
+          res.setHeader('Accept-Ranges', 'bytes');
+          // res.setHeader('Content-Range', 'bytes */' + _res.headers['content-length']);
+        }
         _res.on('data', (c) => {
           res.write(c);
         });

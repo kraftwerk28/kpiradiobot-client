@@ -25,6 +25,11 @@
         </h5>
       </div>
 
+      <!-- <button class="btn btn-primary"
+        :href="'/krb/download/' + songId"
+        :download="songId + '.mp3'">
+        <span>file_download</span>
+      </button> -->
       <button class="btn btn-primary"
         @click="$emit('play')"
         title="Грати цю пісню">

@@ -49,6 +49,9 @@ module.exports = {
     port: '8081',
     openPage: './dist/index.html',
     overlay: true,
+    headers: {
+      'Accept-Ranges': 'bytes'
+    },
     proxy: {
       '/krb': {
         target: 'http://kpiradiobot.ga',

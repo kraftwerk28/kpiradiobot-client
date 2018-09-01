@@ -54,14 +54,10 @@ module.exports = {
     new cssOptimizer({})
   ],
   devServer: {
-    // hot: true,
     host: '0.0.0.0',
     port: '8081',
-    openPage: './dist/index.html',
     overlay: true,
-    headers: {
-      // 'Content-Disposition': 'inline'
-    },
+    stats: 'minimal',
     proxy: {
       '/krb': {
         target: 'http://kpiradiobot.ga',

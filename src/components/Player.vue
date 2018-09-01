@@ -3,21 +3,18 @@
     <div class="pl-root bg-dark text-white rounded"
       :class="{'is-fixed':playerFixed}">
       <div class="btn-group">
-        <button class="btn btn-secondary"
+        <button class="btn btn-outline-light"
           @click="$emit('prev-track')">
           <span>fast_rewind</span>
         </button>
-        <button class="btn btn-secondary"
+        <button class="btn btn-outline-light"
           @click="$emit('toggle-play')">
-          <transition name="play-pause"
-            mode="out-in">
-            <span v-if="paused"
-              :key="1">play_arrow</span>
-            <span v-else
-              :key="2">pause</span>
-          </transition>
+          <span v-if="paused"
+            :key="1">play_arrow</span>
+          <span v-else
+            :key="2">pause</span>
         </button>
-        <button class="btn btn-secondary"
+        <button class="btn btn-outline-light"
           @click="$emit('next-track')">
           <span>fast_forward</span>
         </button>
@@ -80,7 +77,6 @@ export default {
     Seeker
   },
   mounted() {
-
   }
 }
 </script>
@@ -143,7 +139,7 @@ export default {
 }
 
 .play-pause-leave-active {
-  transition: transform 0.2s, opacity .2s;
+  transition: transform 0.2s, opacity 0.2s;
   z-index: 10;
 }
 .play-pause-leave-to {

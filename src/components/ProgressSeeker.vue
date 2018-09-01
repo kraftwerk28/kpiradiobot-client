@@ -54,15 +54,15 @@ export default {
   },
   methods: {
     movHandler(e) {
-      const left = this.$refs.clickarea.offsetLeft;
-      const w = this.$refs.clickarea.offsetWidth;
+      const { left } = this.$refs.clickarea.getBoundingClientRect();
+      const { width: w } = this.$refs.clickarea.getBoundingClientRect();
       this.val = ((e.clientX - left) / w) * this.max;
     },
     mDown(evt) {
       if (evt.button === 0 && !this.disabled) {
         this.clicked = true;
-        const left = this.$refs.clickarea.offsetLeft;
-        const w = this.$refs.clickarea.offsetWidth;
+        const { left } = this.$refs.clickarea.getBoundingClientRect();
+        const { width: w } = this.$refs.clickarea.getBoundingClientRect();
         this.val = ((evt.clientX - left) / w) * this.max;
         document.addEventListener('mousemove', this.movHandler);
         this.$emit('change', this.val);

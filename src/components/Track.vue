@@ -9,7 +9,7 @@
       :style="style">
       <div class="badge badge-dark">
         <span>
-          {{playTime[0]}} -
+          {{playTime[0] + '-'}}
         </span>
         <span>
           {{playTime[1]}}
@@ -24,6 +24,7 @@
         <h5 class="text-nowrap d-inline">
           {{songTitle}}
         </h5>
+        <div></div>
       </div>
 
       <a class="btn btn-secondary btn-sm p-0 border-dark mr-1"
@@ -107,6 +108,7 @@ li {
   }
   > div:nth-child(2) {
     flex: 1;
+    position: relative;
     flex-basis: 400px;
     overflow-x: scroll;
     padding-left: 20px;

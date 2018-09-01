@@ -9,6 +9,10 @@ window.addEventListener('error', (msg, url, line, column) => {
     body: `${new Date()}%0A${navigator.userAgent}%0A%09${line}:${column}%09${msg}%0A%0A`,
     method: 'POST',
   });
+});
+
+window.addEventListener('beforeunload', function () {
+  alert('lol');
 })
 
 window.vm = new Vue({
@@ -16,4 +20,4 @@ window.vm = new Vue({
   render(h) {
     return h(App);
   }
-})
+});

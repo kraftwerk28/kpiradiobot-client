@@ -199,7 +199,8 @@ export default {
       this.timePlaying = v;
     },
     volume(val) {
-      this.currentSong.volume = val;
+      if (this.currentSong)
+        this.currentSong.volume = val;
     }
   },
   computed: {
@@ -385,6 +386,14 @@ export default {
         this.playerFixed = true;
       } else if (window.scrollY <= 50 && this.playerFixed)
         this.playerFixed = false;
+    });
+
+    const vol = localStorage.getItem('krbVolume');
+    if (vol !== undefined && !isNaN(vol)) {
+      this.volume = +vol;
+    }
+    window.addEventListener('beforeunload', () => {
+      localStorage.setItem('krbVolume', this.volume);
     });
   }
 }

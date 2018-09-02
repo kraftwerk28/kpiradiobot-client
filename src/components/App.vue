@@ -392,6 +392,7 @@ export default {
     if (vol !== undefined && !isNaN(vol)) {
       this.volume = +vol;
     }
+    if (this.volume <= 0) this.volume = 0.5;
     window.addEventListener('beforeunload', () => {
       localStorage.setItem('krbVolume', this.volume);
     });

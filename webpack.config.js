@@ -6,7 +6,6 @@ const cssExtracter = require('mini-css-extract-plugin');
 const cssOptimizer = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
   entry: './src/main.js',
   output: {
     path: __dirname + '/dist',
@@ -33,8 +32,7 @@ module.exports = {
         test: /\.scss$/,
         exclude: /node_modules/,
         use: [
-          process.env.NODE_ENV !== 'production' ? 'style-loader' :
-            cssExtracter.loader,
+          cssExtracter.loader,
           'css-loader',
           'sass-loader'
         ]

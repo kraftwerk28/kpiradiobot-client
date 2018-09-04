@@ -86,7 +86,8 @@
         <ul v-for="(group, i) in splitByPairs"
           :key="i"
           class="list-group">
-          <li class="list-group-item bg-dark text-white text-center align-middle mt-3">
+          <li v-if="groupHeader(i) !== null"
+            class="list-group-item bg-dark text-white text-center align-middle mt-3">
             <h3>
               <span class="material-icons align-middle">arrow_downward</span>
               {{groupHeader(i)}}
@@ -346,7 +347,7 @@ export default {
     },
 
     groupHeader(i) {
-      return i < 1 ? 'До першої пари' : 'Після ' + i + ' пари';
+      return i < 1 ? null : 'Після ' + i + ' пари';
     },
 
     setTimeStamp(e) {

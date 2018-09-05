@@ -11,9 +11,9 @@ window.addEventListener('error', (msg, url, line, column) => {
   });
 });
 
-window.addEventListener('beforeunload', function () {
-  alert('lol');
-})
+window.addEventListener('load', function () {
+  fetch('/session', { method: 'GET' });
+});
 
 window.vm = new Vue({
   el: '#zalupa',

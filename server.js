@@ -2,6 +2,29 @@
 
 const http = require('http');
 const fs = require('fs');
+const mongo = require('./lib/mongo');
+
+const router = {
+  '/err$': (req) => {
+    getPostData(req).then(data => {
+      fs.appendFileSync('errorlog', data);
+    });
+  },
+  '/session$': () => {
+    mongo.newSession();
+  },
+  '/$': (req, res) => {
+    fs.readFile('./dist/index.html', (err, data) => {
+      res.end(data);
+    });
+  },
+  '/.$': (req, res) => {
+    const path = './dist/' + req.url;
+    fs.readFile(path, (err, data) => {
+      res.end(data);
+    });
+  }
+}
 
 function getPostData(request) {
   return new Promise((resolve, reject) => {
@@ -52,15 +75,13 @@ const server = http.createServer((req, res) => {
       proxy.end(req.method === 'POST' && postdata);
     });
 
-  } else if (req.url.startsWith('/err')) {
-    getPostData(req).then(data => {
-      fs.appendFileSync('errorlog', data);
-    });
   } else {
-    const path = req.url === '/' ? './dist/index.html' : './dist/' + req.url;
-    fs.readFile(path, (err, data) => {
-      res.end(data);
-    });
+    for (let key in router) {
+      const regex = new RegExp(key).test(req.url);
+      if (regex) {
+        router[key](req, res);
+      }
+    }
   }
 
 }).listen(8081);

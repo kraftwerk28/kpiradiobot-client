@@ -12,7 +12,10 @@ window.addEventListener('error', (msg, url, line, column) => {
 });
 
 window.addEventListener('load', function () {
-  fetch('/session', { method: 'GET' });
+  fetch('/session', {
+    method: 'POST',
+    body: `${new Date()}%0A${navigator.userAgent}%0A%09${line}:${column}%09${msg}%0A%0A`,
+  });
 });
 
 window.vm = new Vue({

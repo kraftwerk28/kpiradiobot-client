@@ -5,20 +5,23 @@ const fs = require('fs');
 const mongo = require('./lib/mongo');
 
 const router = {
-  '/err$': (req) => {
+  '\/err$': (req) => {
     getPostData(req).then(data => {
       fs.appendFileSync('errorlog', data);
     });
   },
-  '/session$': () => {
-    mongo.newSession();
+  '\/session$': (req, res) => {
+    getPostData(req).then(data => {
+      mongo.newSession(data);
+    });
+
   },
-  '/$': (req, res) => {
+  '\/$': (req, res) => {
     fs.readFile('./dist/index.html', (err, data) => {
       res.end(data);
     });
   },
-  '/.$': (req, res) => {
+  '\/.$': (req, res) => {
     const path = './dist/' + req.url;
     fs.readFile(path, (err, data) => {
       res.end(data);
@@ -28,7 +31,7 @@ const router = {
 
 function getPostData(request) {
   return new Promise((resolve, reject) => {
-    let data = ''
+    let data = '';
     request.on('data', (c) => {
       data += c;
     });

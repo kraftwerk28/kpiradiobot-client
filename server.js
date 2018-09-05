@@ -21,7 +21,7 @@ const router = {
       res.end(data);
     });
   },
-  '\/.$': (req, res) => {
+  '\/.*$': (req, res) => {
     const path = './dist/' + req.url;
     fs.readFile(path, (err, data) => {
       res.end(data);

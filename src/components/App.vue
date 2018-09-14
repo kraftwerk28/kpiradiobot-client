@@ -70,8 +70,7 @@
         <div class="alert alert-dark">
           Завантаження...
         </div>
-        <div class="spin-loader"
-          style="margin: auto">
+        <div class="spin-loader">
           <img src="../assets/ebalo-bota.png"
             alt="">
         </div>
@@ -244,6 +243,8 @@ export default {
 
         const audio = new Audio();
         audio.src = window.origin + '/history/play2/' + path;
+        this.loadingSong = true;
+        this.currentSongId = path;
         audio.load();
 
         // audio.onprogress = (e) => {
@@ -253,6 +254,7 @@ export default {
         // };
 
         audio.onloadeddata = (e) => {
+          this.loadingSong = false;
           this.playSong(path);
         };
 
@@ -262,32 +264,9 @@ export default {
 
         this.songs[path] = audio;
         this.loadProgress = 0;
-
-
-        // let xhr = this.mainXHR;
-        // xhr = new XMLHttpRequest()
-
-        // xhr.onprogress = (e) => {
-        //   this.loadProgress =
-        //     Math.round((e.loaded / e.total) * 100);
-        // };
-
-
-        // xhr.onreadystatechange = (e) => {
-        //   if (xhr.readyState === 4 && xhr.status === 200) {
-        //     this.songs[path] = new Audio(xhr.responseText);
-        //     this.playSong(path);
-        //     this.loadProgress = 0;
-        //   }
-        // };
-
-        // xhr.open('GET', window.origin + '/history/play2/' + path);
-        // xhr.setRequestHeader('Content-Type', 'text/plain');
-        // xhr.send();
       }
     },
     playSong(id) {
-      this.currentSongId = id;
       if (this.currentSong) {
         this.paused = true;
       }
@@ -347,7 +326,7 @@ export default {
     },
 
     groupHeader(i) {
-      return i < 1 ? null : 'Після ' + i + ' пари';
+      return i < 1 ? null : (i >= 5 ? 'Вечірній ефір' : 'Після ' + i + ' пари');
     },
 
     setTimeStamp(e) {
@@ -420,33 +399,39 @@ export default {
   overflow-x: hidden;
 }
 
-.spin-loader > img {
-  width: 100px;
-  height: 100px;
-  // background: $primary;
-  border-radius: 10px;
-  animation: r 1s ease 0s infinite;
-  flex-basis: 100%;
+.spin-loader {
+  margin: auto;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  > img {
+    width: 100px;
+    height: 100px;
+    // background: $primary;
+    border-radius: 10px;
+    animation: r 1s ease 0s infinite;
+    flex-basis: 100%;
 
-  @keyframes r {
-    0% {
-      transform: rotate(0deg) scale(1);
-    }
-    25% {
-      transform: rotate(0deg) scale(1.2);
-    }
-    50% {
-      transform: rotate(0deg) scale(1);
-    }
-    100% {
-      transform: rotate(360deg) scale(1);
+    @keyframes r {
+      0% {
+        transform: rotate(0deg) scale(1);
+      }
+      25% {
+        transform: rotate(0deg) scale(1.2);
+      }
+      50% {
+        transform: rotate(0deg) scale(1);
+      }
+      100% {
+        transform: rotate(360deg) scale(1);
+      }
     }
   }
 }
 
 .scrollup {
   position: fixed;
-  right: 20px;
+  right: 10px;
   bottom: 10px;
   border-radius: 50%;
   width: 50px;

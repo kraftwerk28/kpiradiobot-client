@@ -46,6 +46,10 @@
         <span v-if="!$parent.paused && $parent.currentSongId === songId">
           pause
         </span>
+        <span v-else-if="$parent.loadingSong && $parent.currentSongId === songId"
+          class="loader">
+          autorenew
+        </span>
         <span v-else>play_arrow</span>
       </button>
     </li>
@@ -129,5 +133,18 @@ li {
   > span {
     opacity: 0;
   }
+}
+
+.loader {
+  @keyframes a {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  animation: a 1s linear 0s infinite;
 }
 </style>

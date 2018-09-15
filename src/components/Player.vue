@@ -112,7 +112,7 @@ export default {
   > div:nth-child(3) {
     // song name and close button
     display: flex;
-    flex: 1;
+    flex: 1 1 auto;
     justify-content: space-between;
     flex-flow: row nowrap;
     overflow: hidden;

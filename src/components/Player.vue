@@ -46,7 +46,7 @@
       </div>
 
       <div class="align-items-center">
-        <span>{{songTitle}}</span>
+        <div>{{songTitle}}</div>
         <button class="btn btn-danger"
           @click="$emit('close')">
           <span>close</span>
@@ -93,11 +93,11 @@ export default {
   flex-basis: 400px;
 
   > div:nth-child(2) {
-    flex: 1;
+    // seekers
     display: flex;
+    flex: 4 1 400px;
     align-items: center;
     flex-flow: row nowrap;
-    flex-basis: 400px;
     > div:nth-child(1) {
       flex: 3;
     }
@@ -110,11 +110,26 @@ export default {
     }
   }
   > div:nth-child(3) {
+    // song name and close button
     display: flex;
-    > span {
-      overflow: hidden;
+    flex: 1;
+    justify-content: space-between;
+    flex-flow: row nowrap;
+    overflow: hidden;
+    > div {
+      flex: 1;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       padding-left: 10px;
       padding-right: 10px;
+      max-width: 200px;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+    > button {
+      flex: 0;
+      align-self: flex-end;
     }
   }
 }

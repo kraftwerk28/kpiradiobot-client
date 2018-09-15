@@ -86,7 +86,7 @@
           :key="i"
           class="list-group">
           <li v-if="groupHeader(i) !== null"
-            class="list-group-item bg-dark text-white text-center align-middle mt-3">
+            class="list-group-item bg-secondary text-light text-white text-center align-middle mt-3">
             <h3>
               <span class="material-icons align-middle">arrow_downward</span>
               {{groupHeader(i)}}
@@ -131,7 +131,7 @@
 
     <transition name="scrollup">
       <button v-if="playerFixed"
-        class="scrollup btn btn-dark"
+        class="scrollup btn btn-light"
         @click="scrollUpFull">
         <span>arrow_upward</span>
       </button>

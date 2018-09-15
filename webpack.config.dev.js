@@ -2,10 +2,9 @@
 
 const { VueLoaderPlugin } = require('vue-loader');
 const HWP = require('html-webpack-plugin');
-const cssExtracter = require('mini-css-extract-plugin');
-const cssOptimizer = require('optimize-css-assets-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   entry: './src/main.js',
   output: {
     path: __dirname + '/dist',
@@ -32,7 +31,7 @@ module.exports = {
         test: /\.scss$/,
         exclude: /node_modules/,
         use: [
-          cssExtracter.loader,
+          'style-loader',
           'css-loader',
           'sass-loader'
         ]
@@ -42,14 +41,10 @@ module.exports = {
   plugins: [
     new VueLoaderPlugin(),
     new HWP({
-      template: './src/index.html',
+      template: './src/index.dev.html',
       inject: 'body',
       minify: true
     }),
-    new cssExtracter({
-      filename: '[name].css'
-    }),
-    new cssOptimizer({})
   ],
   devServer: {
     host: '0.0.0.0',

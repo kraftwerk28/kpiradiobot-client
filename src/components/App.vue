@@ -326,7 +326,7 @@ export default {
     },
 
     groupHeader(i) {
-      return i < 1 ? null : (i >= 5 ? 'Вечірній ефір' : 'Після ' + i + ' пари');
+      return i < 1 ? 'Ранковий ефір' : (i >= 5 ? 'Вечірній ефір' : 'Після ' + i + ' пари');
     },
 
     setTimeStamp(e) {

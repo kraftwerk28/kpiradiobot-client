@@ -242,7 +242,7 @@ export default {
       } else {
 
         const audio = new Audio();
-        audio.src = window.origin + '/history/play2/' + path;
+        audio.src = window.origin + '/playlist/prev/play/' + path;
         this.loadingSong = true;
         this.currentSongId = path;
         audio.load();
@@ -336,7 +336,7 @@ export default {
     ajaxifySongs(dateTime) {
       const tm = Math.round(dateTime / 1000);
       this.loadingSongs = true;
-      fetch(window.origin + '/history/getday/' + tm, {
+      fetch(window.origin + '/playlist/prev/get/' + tm, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

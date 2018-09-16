@@ -10,11 +10,19 @@
     </div>
 
     <nav class="navbar navbar-dark bg-primary pt-2">
-      <a class="navbar-brand"
-        href="https://t.me/kpiradio_bot"
-        title="Developed by @kraftwerk28">
-        KPIRADIOBOT
-      </a>
+      <div class="dropdown">
+        <div class="navbar-brand"
+          data-toggle="dropdown"
+          title="Developed by @kraftwerk28">
+          KPIRADIOBOT
+        </div>
+        <div class="dropdown-menu">
+          <a href="https://t.me/kpiradio_bot">Telegram bot</a>
+          <div class="dropdown-divider"></div>
+          <a href="#">CRUD</a>
+        </div>
+      </div>
+
       <Player :paused="paused"
         v-show="playerVisible"
         :songTitle="songName"
@@ -145,6 +153,9 @@ import Player from './Player.vue';
 import Seeker from './ProgressSeeker.vue';
 import '../assets/kpi.png';
 import '../assets/ebalo-bota.png';
+
+import 'bootstrap';
+import $ from 'jquery';
 
 Date.prototype.yyyymmdd = function () {
   let mm = this.getMonth() + 1; // getMonth() is zero-based
@@ -448,5 +459,17 @@ export default {
 .scrollup-enter,
 .scrollup-leave-to {
   transform: translateY(100px);
+}
+
+.dropdown {
+  .navbar-brand {
+    cursor: pointer;
+  }
+  .dropdown-menu {
+    padding: 0.5rem;
+    a {
+      display: block;
+    }
+  }
 }
 </style>

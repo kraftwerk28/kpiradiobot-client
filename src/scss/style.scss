@@ -3,7 +3,7 @@
 body {
   overflow-y: scroll;
   overflow-x: hidden;
-  
+
   &::-webkit-scrollbar {
     width: 10px;
   }
@@ -24,6 +24,10 @@ body {
 input[type='date'] {
   &::-webkit-clear-button {
     appearance: none;
+    display: none;
+  }
+
+  &::-webkit-inner-spin-button {
     display: none;
   }
 }

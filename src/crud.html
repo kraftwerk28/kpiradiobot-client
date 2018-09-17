@@ -23,43 +23,187 @@
     crossorigin="anonymous"></script>
 
   <style>
-    html,
-    body {
-      height: 100%;
+    .list-group-item {
+      user-select: none;
+      display: flex;
+      flex-flow: row nowrap;
+      align-items: center;
     }
 
-    body .container-fluid {
-      background: #333;
-      height: 100%;
+    .list-group-item * {
+      /* display: inline; */
+    }
+
+    .list-group-item span {
+      vertical-align: middle;
+      padding-right: 10px;
+      cursor: grab;
+    }
+
+    .drag-cont {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .drag-cont>* {
+      box-shadow: 0px 0px 5px black;
+    }
+
+    .overlay {
+      position: fixed;
+      bottom: 20px;
+    }
+
+    .overlay.right {
+      right: 20px;
+    }
+
+    .overlay.left {
+      left: 20px;
     }
 
   </style>
 
   <script>
+    window.rServer = 'http://kpiradiobot.ga/';
+    window.dragSensitivity = 20;
     $(function () {
-      'use strict';
-      $.ajax('https://api.myjson.com/bins/1b4m9k', {
-        async: true,
-      }).progress((d) => {
-        console.log(d);
+      'use strict'
+
+      const dist = (x1, x2, y1, y2) => Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
+
+      function swapTransaction(i1, i2) {
+        $.ajax({
+          method: 'GET',
+          url: `playlist/next/move/${i1}/${i2}`,
+        }).done(() => {
+          alert('Transaction complete');
+        });
+      }
+
+
+      // это говно тебе уже не надо
+
+      $.fn.isAfter = function (sel) {
+        return this.prevAll().filter(sel).length !== 0;
+      };
+
+      $.fn.isBefore = function (sel) {
+        return this.nextAll().filter(sel).length !== 0;
+      };
+
+      function reBindHandlers() {
+        let clickStart = null;
+        let dragTrigger = false;
+        let dragging = false;
+        let dragEl = null;
+        let toClone = null;
+        let moveToTransactionIndex = null;
+
+        $(document).on('mousemove', function ({ clientX, clientY }) {
+          if (dragTrigger && dist(clientX, clickStart.x, clientY, clickStart.y) > dragSensitivity) {
+            const { width, height, left } = toClone.getBoundingClientRect();
+            dragEl = $(toClone)
+              .clone()
+              .attr('id', 'drag-el')
+              .addClass('li-drag')
+              .css({ width, height, left, opacity: '0.5' })
+              .appendTo($('.drag-cont').first());
+            $(toClone).css('visibility', 'hidden');
+            dragTrigger = false;
+            dragging = true;
+          }
+
+          if (dragEl) {
+            dragEl
+              .css({
+                top: clientY - clickStart.y,
+              });
+          }
+        });
+
+        $(document).on('mouseup', function () {
+          if (moveToTransactionIndex) {
+            swapTransaction(+$(toClone).attr('id'), moveToTransactionIndex);
+            moveToTransactionIndex = null;
+          }
+          $('#list').children().each((index, el) => {
+            $(el).attr('id', index + 1);
+          });
+          $(dragEl).remove();
+          dragEl = null;
+          dragging = false;
+          $(toClone).css('visibility', 'visible');
+          toClone = null;
+        });
+
+        $('#list li span.material-icons').on('mousedown', function (e) {
+          const { left, top } = this.getBoundingClientRect();
+          clickStart = { x: e.clientX - left, y: e.clientY - top };
+          toClone = $(this).parent()[0];
+          dragTrigger = true;
+        });
+        $('#list li').on('mouseenter', function () {
+          moveToTransactionIndex = $(this).attr('id');
+          if (dragEl) {
+            if ($(this).isAfter($(toClone))) {
+              $(this).after($(toClone));
+            } else {
+              $(this).before($(toClone));
+            }
+
+          }
+        })
+      }
+
+      $.ajax({
+        url: rServer + 'playlist/next/get',
+        contentType: 'application/json',
+        method: 'GET'
       }).done((data) => {
-        console.log(data);
+        const arr = JSON.parse(data);
+        if (arr.length === 0) {
+          $('#list').append(`
+          <li class="list-group-item list-group-item-info">
+            <h5>Тут пусто...</h5>
+          </li>
+          `);
+          return;
+        }
+        arr.forEach((item, index) => {
+          $('#list').append(`
+          <li id="${item.index}" class="list-group-item">
+            <span class="material-icons">drag_handle</span>
+            <h5>${item.title}</h5>
+          </li>
+          `);
+        });
+        reBindHandlers();
+      }).fail(() => {
+          $('#list').append(`
+          <li class="list-group-item list-group-item-danger">
+            <h5>404 Что-то пошло не так...</h5>
+          </li>
+          `);
       });
+
+
     });
+
   </script>
 
-  <title>KpiRadio CRUD</title>
+  <title>KPIRadioBot CRUD</title>
 </head>
 
 <body>
-  <div class="container-fluid d-flex justify-content-center align-items-center">
-    <div class="form-group col-lg-4 col-md-6 col-sm-8 border p-3 rounded text-center">
-      <h3 class="form-text text-light">KPIRADIOBOT CRUD</h3>
-      <input type="password"
-        placeholder="password"
-        class="form-control mt-3">
-      <button class="btn btn-light mt-3">Submit</button>
-    </div>
+  <div class="container">
+    <ul id="list"
+      class="list-group">
+    </ul>
+    <div class="drag-cont"></div>
   </div>
 </body>
 

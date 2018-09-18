@@ -18,8 +18,6 @@
         </div>
         <div class="dropdown-menu">
           <a href="https://t.me/kpiradio_bot">Telegram bot</a>
-          <div class="dropdown-divider"></div>
-          <a href="#">CRUD</a>
         </div>
       </div>
 

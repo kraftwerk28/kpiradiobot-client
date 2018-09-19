@@ -45,7 +45,7 @@ const server = http.createServer((req, res) => {
     // proxying...
 
     const proxyUrl = req.url.slice(4);
-    const isAudio = proxyUrl.includes('/play2');
+    const isAudio = proxyUrl.includes('/play');
 
     getPostData(req).then(postdata => {
       const proxy = http.request({

@@ -3,18 +3,17 @@
     mode="out-in"
     duration="500"
     appear>
-    <li id="header"
-      class="list-group-item d-flex justify-content-between align-items-center"
+    <li class="list-group-item d-flex justify-content-between align-items-center"
       :class="{ 'bg-light': $parent.currentSongId === songId }"
       :style="style">
-      <div class="badge badge-dark">
+      <span class="badge badge-dark">
         <span>
           {{playTime[0] + '-'}}
         </span>
         <span>
           {{playTime[1]}}
         </span>
-      </div>
+      </span>
 
       <div class="head-scroll">
         <h6 v-if="songInfo.artist.length"
@@ -106,9 +105,12 @@ export default {
 }
 
 li {
-  > div:nth-child(1) {
+  > span.badge {
     display: flex;
     flex-flow: row wrap;
+    span {
+      font-size: 150%;
+    }
   }
   > div:nth-child(2) {
     flex: 1;
@@ -120,11 +122,9 @@ li {
       display: none;
     }
   }
-}
-
-#header {
   overflow-x: hidden;
 }
+
 .telegram-logo {
   background-image: url("../assets/telegram-logo.png");
   background-size: 20px;
@@ -146,5 +146,20 @@ li {
   }
 
   animation: a 1s linear 0s infinite;
+}
+
+@media screen and (max-width: 640px) {
+  li.list-group-item {
+    padding-left: 5px;
+    padding-right: 5px;
+
+    span.badge span {
+      font-size: inherit;
+    }
+
+    > div:nth-child(2) {
+      padding-left: 5px;
+    }
+  }
 }
 </style>

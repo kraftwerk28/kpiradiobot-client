@@ -88,13 +88,13 @@
       let touchHovered = null;
 
       function swapTransaction(i1, i2) {
-        alert('Transaction complete');
-        // $.ajax({
-        //   method: 'GET',
-        //   url: `next/move/${i1}/${i2}`,
-        // }).done(() => {
-        //   alert('Transaction complete');
-        // });
+        // alert('Transaction complete');
+        $.ajax({
+          method: 'GET',
+          url: `next/move/${i1}/${i2}`,
+        }).done(() => {
+          alert('Transaction complete');
+        });
       }
 
 
@@ -272,17 +272,17 @@
         })
         .fail(() => {
           // comment dat shit!!!
-          JSON.parse('[{"title": "Axel Johansson - The River", "time_start": 1537188600, "index": "1"}, {"title": "Faul & Wad Ad vs. Pnau - Changes", "time_start": 1537188806, "index": "2"}, {"title": "Halsey - Gasoline", "time_start": 1537189003, "index": "3"}, {"title": "Kygo - Firestone ft. Conrad Sewell", "time_start": 1537189200, "index": "4"}, {"title": "Loren Allred (OST \u0438\u0437 \u0412\u0435\u043b\u0438\u0447\u0430\u0439\u0448\u0438\u0439 \u0448\u043e\u0443\u043c\u0435\u043d, The Greatest Showman) - Never Enough", "time_start": 1537189420, "index": "5"}, {"title": "lp - night-like-this", "time_start": 1537189626, "index": "6"}, {"title": "monatik - dym", "time_start": 1537189864, "index": "7"}, {"title": "Myth & Roid - Jingo Jungle", "time_start": 1537190068, "index": "8"}, {"title": "Nirvana - The Man Who Sold The World", "time_start": 1537190297, "index": "9"}, {"title": "onuka - animal", "time_start": 1537190525, "index": "10"}, {"title": "Pixies - Where Is My Mind?", "time_start": 1537190790, "index": "11"}, {"title": "Rhye - Waste", "time_start": 1537191022, "index": "12"}, {"title": "System of a Down - Roulette", "time_start": 1537191232, "index": "13"}]')
-            .forEach((item, index) => {
-              $list.append(`
-                <li id="${item.index}" class="list-group-item">
-                  <span class="material-icons">drag_handle</span>
-                  <h5>${item.title}</h5>
-                </li>
-              `);
-            });
-          reBindHandlers();
-          return;
+          // JSON.parse('[{"title": "Axel Johansson - The River", "time_start": 1537188600, "index": "1"}, {"title": "Faul & Wad Ad vs. Pnau - Changes", "time_start": 1537188806, "index": "2"}, {"title": "Halsey - Gasoline", "time_start": 1537189003, "index": "3"}, {"title": "Kygo - Firestone ft. Conrad Sewell", "time_start": 1537189200, "index": "4"}, {"title": "Loren Allred (OST \u0438\u0437 \u0412\u0435\u043b\u0438\u0447\u0430\u0439\u0448\u0438\u0439 \u0448\u043e\u0443\u043c\u0435\u043d, The Greatest Showman) - Never Enough", "time_start": 1537189420, "index": "5"}, {"title": "lp - night-like-this", "time_start": 1537189626, "index": "6"}, {"title": "monatik - dym", "time_start": 1537189864, "index": "7"}, {"title": "Myth & Roid - Jingo Jungle", "time_start": 1537190068, "index": "8"}, {"title": "Nirvana - The Man Who Sold The World", "time_start": 1537190297, "index": "9"}, {"title": "onuka - animal", "time_start": 1537190525, "index": "10"}, {"title": "Pixies - Where Is My Mind?", "time_start": 1537190790, "index": "11"}, {"title": "Rhye - Waste", "time_start": 1537191022, "index": "12"}, {"title": "System of a Down - Roulette", "time_start": 1537191232, "index": "13"}]')
+          //   .forEach((item, index) => {
+          //     $list.append(`
+          //       <li id="${item.index}" class="list-group-item">
+          //         <span class="material-icons">drag_handle</span>
+          //         <h5>${item.title}</h5>
+          //       </li>
+          //     `);
+          //   });
+          // reBindHandlers();
+          // return;
 
           $list.append(`
             <li class="list-group-item list-group-item-danger">

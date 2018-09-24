@@ -215,7 +215,7 @@ export default {
     volume(val) {
       if (this.currentSong)
         this.currentSong.volume = val;
-    }
+    },
   },
   computed: {
     splitByPairs() {
@@ -487,6 +487,6 @@ export default {
 .group-header-enter,
 .group-header-leave-to {
   opacity: 0;
-  transform: translateY(-50px) scale(2);
+  transform: translateY(-50px) scale(0.5);
 }
 </style>

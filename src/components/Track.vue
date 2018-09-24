@@ -77,7 +77,7 @@ export default {
     },
     style() {
       return {
-        transitionDelay: this.index * 50 + 'ms'
+        'transition-delay': this.index * 50 + 'ms'
       }
     },
     songTitle() {
@@ -103,12 +103,10 @@ export default {
 .track-li-enter,
 .track-li-leave-to {
   opacity: 0;
-  transform: translateY(-50px);
-  // transform: rotateX(-90deg);
+  transform: translateY(-50px) scale(1.5);
 }
 
 li {
-  transform-origin: top left;
   > span.badge {
     display: flex;
     flex-flow: row wrap;

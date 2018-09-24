@@ -94,17 +94,21 @@ export default {
 
 <style lang="scss" scoped>
 @import "../scss/style";
+
 .track-li-enter-active,
 .track-li-leave-active {
   transition: transform 0.5s, opacity 0.5s;
 }
+
 .track-li-enter,
 .track-li-leave-to {
   opacity: 0;
   transform: translateY(-50px);
+  // transform: rotateX(-90deg);
 }
 
 li {
+  transform-origin: top left;
   > span.badge {
     display: flex;
     flex-flow: row wrap;

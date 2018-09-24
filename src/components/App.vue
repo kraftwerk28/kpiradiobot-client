@@ -91,20 +91,25 @@
         <ul v-for="(group, i) in splitByPairs"
           :key="i"
           class="list-group">
-          <li v-if="groupHeader(i) !== null"
-            class="list-group-item bg-secondary text-light text-white text-center align-middle mt-3">
-            <h3>
-              <span class="material-icons align-middle">arrow_downward</span>
-              {{groupHeader(i)}}
-              <span class="material-icons align-middle">arrow_downward</span>
-            </h3>
-          </li>
-          <Track v-for="(song, i) in group"
-            :index="i"
+          <transition name="group-header"
+            duration="500"
+            appear>
+            <li v-if="groupHeader(i) !== null"
+              :style="{ 'transition-delay': group[0].ordNum * 50 + 'ms' }"
+              class="list-group-item bg-secondary text-light text-white text-center align-middle mt-3">
+              <h3>
+                <span class="material-icons align-middle">arrow_downward</span>
+                {{groupHeader(i)}}
+                <span class="material-icons align-middle">arrow_downward</span>
+              </h3>
+            </li>
+          </transition>
+          <Track v-for="(song, j) in group"
+            :index="song.ordNum"
             :songId="song.path"
-            :key="i"
+            :key="j"
             :songInfo="song"
-            @play="loadSong(song.path, i)" />
+            @play="loadSong(song.path, j)" />
         </ul>
       </div>
 
@@ -353,6 +358,9 @@ export default {
       })
         .then(res => res.json())
         .then(obj => {
+          obj.forEach((item, i) => {
+            item['ordNum'] = i;
+          })
           this.songsData = obj;
           this.loadingSongs = false;
         });
@@ -469,5 +477,16 @@ export default {
       display: block;
     }
   }
+}
+
+.group-header-enter-active,
+.group-header-leave-active {
+  transition: transform 0.5s, opacity 0.5s;
+}
+
+.group-header-enter,
+.group-header-leave-to {
+  opacity: 0;
+  transform: translateY(-50px) scale(2);
 }
 </style>

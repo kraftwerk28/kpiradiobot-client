@@ -19,6 +19,8 @@ body {
   &::-webkit-scrollbar-track {
     background: $light;
   }
+
+  perspective: 5000px;
 }
 
 input[type='date'] {

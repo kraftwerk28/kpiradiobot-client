@@ -46,6 +46,7 @@ module.exports = {
       minify: true
     }),
   ],
+  devtool: 'source-map',
   devServer: {
     host: '0.0.0.0',
     port: '8081',

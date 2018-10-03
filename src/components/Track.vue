@@ -4,7 +4,7 @@
     duration="500"
     appear>
     <li class="list-group-item d-flex justify-content-between align-items-center"
-      :class="{ 'bg-light': $parent.currentSongId === songId }"
+      :class="{ 'bg-light': currentSongId === songId }"
       :style="style">
       <span class="badge badge-dark">
         <span>
@@ -42,14 +42,16 @@
       <button class="btn btn-primary"
         @click="$emit('play')"
         title="Грати цю пісню">
-        <span v-if="!$parent.paused && $parent.currentSongId === songId">
+        <span v-if="!paused && currentSongId === songId">
           pause
         </span>
-        <span v-else-if="$parent.loadingSong && $parent.currentSongId === songId"
+        <span v-else-if="loadingSong && currentSongId === songId"
           class="loader">
           autorenew
         </span>
-        <span v-else>play_arrow</span>
+        <span v-else>
+          play_arrow
+        </span>
       </button>
     </li>
   </transition>
@@ -66,7 +68,10 @@ export default {
   props: {
     songInfo: Object,
     index: Number,
-    songId: String
+    songId: String,
+    paused: Boolean,
+    loadingSong: Boolean,
+    currentSongId: String || Number,
   },
   computed: {
     playTime() {
@@ -88,6 +93,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.paused);
   }
 }
 </script>

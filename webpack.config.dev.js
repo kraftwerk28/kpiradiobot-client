@@ -3,7 +3,7 @@
 const { VueLoaderPlugin } = require('vue-loader');
 const HWP = require('html-webpack-plugin');
 
-module.exports = {
+module.exports = (env) => ({
   mode: 'development',
   entry: './src/main.js',
   output: {
@@ -59,4 +59,4 @@ module.exports = {
       }
     }
   }
-}
+});

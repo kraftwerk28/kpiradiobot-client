@@ -41,6 +41,10 @@ function getPostData(request) {
 };
 
 const server = http.createServer((req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Request-Method', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+  res.setHeader('Access-Control-Allow-Headers', '*');
   if (req.url.startsWith('/krb')) {
     // proxying...
 
@@ -58,10 +62,6 @@ const server = http.createServer((req, res) => {
         }
       }, (_res) => {
         res.setHeader('Content-Length', _res.headers['content-length']);
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Request-Method', '*');
-        res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
-        res.setHeader('Access-Control-Allow-Headers', '*');
         if (isAudio) {
           res.setHeader('Content-Disposition', 'inline; filename="kpiradiobot.mp3"');
           res.setHeader('Accept-Ranges', 'bytes');

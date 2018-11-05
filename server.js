@@ -11,19 +11,25 @@ const router = {
     });
   },
   '\/session$': (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+    res.setHeader('Access-Control-Allow-Headers', '*');
     getPostData(req).then(data => {
       mongo.newSession(data);
     });
 
   },
   '\/$': (req, res) => {
-    fs.readFile('./dist/index.html', (err, data) => {
+    console.log('/index.html');
+    fs.readFile('./dist/index.html', 'utf8', (err, data) => {
       res.end(data);
     });
   },
   '\/.*$': (req, res) => {
+    console.log(req.url);
     const path = './dist/' + req.url;
-    fs.readFile(path, (err, data) => {
+    fs.readFile(path, 'utf8', (err, data) => {
       res.end(data);
     });
   }
@@ -41,18 +47,18 @@ function getPostData(request) {
 };
 
 const server = http.createServer((req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Request-Method', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
-  res.setHeader('Access-Control-Allow-Headers', '*');
   if (req.url.startsWith('/krb')) {
-    // proxying...
+    console.log('proxying...');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Request-Method', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
+    res.setHeader('Access-Control-Allow-Headers', 'content-type');
 
     const proxyUrl = req.url.slice(4);
     const isAudio = proxyUrl.includes('/play');
 
     getPostData(req).then(postdata => {
-      const proxy = http.request({
+      const proxy = http.get({
         method: req.method,
         host: 'kpiradiobot.ga',
         port: '80',
@@ -83,8 +89,11 @@ const server = http.createServer((req, res) => {
       const regex = new RegExp(key).test(req.url);
       if (regex) {
         router[key](req, res);
+        break;
       }
     }
   }
 
-}).listen(8081);
+});
+
+server.listen(8081, () => { console.log('Server listening on http://localhost:8081'); });

@@ -51,60 +51,60 @@
             class="form-control" />
         </div>
 
-          <div class="input-group col-md-8">
-            <input type="text"
+        <div class="input-group col-md-8">
+          <input type="text"
             :disabled="searching"
             placeholder="пошук"
             class="form-control"
             v-model="searchPattern"
             @keyup.enter="searching = true">
-            <div class="input-group-append">
-              <button class="btn"
-                :disabled="searchPattern.length < 1"
-                @click="searching = !searching"
-                :class="{ 'btn-outline-secondary': !searching, 'btn-danger': searching }">
-                <span v-if="searching">close</span>
-                <span v-else>search</span>
-              </button>
-            </div>
+          <div class="input-group-append">
+            <button class="btn"
+              :disabled="searchPattern.length < 1"
+              @click="searching = !searching"
+              :class="{ 'btn-outline-secondary': !searching, 'btn-danger': searching }">
+              <span v-if="searching">close</span>
+              <span v-else>search</span>
+            </button>
           </div>
         </div>
+      </div>
 
-        <div v-if="loadingSongs"
-          class="text-center"
-          style="text-align: -webkit-center;">
-          <div class="alert alert-dark">
-            Завантаження...
-          </div>
-          <div class="spin-loader">
-            <img src="../assets/ebalo-bota.png"
+      <div v-if="loadingSongs"
+        class="text-center"
+        style="text-align: -webkit-center;">
+        <div class="alert alert-dark">
+          Завантаження...
+        </div>
+        <div class="spin-loader">
+          <img :src="ebaloBota"
             alt="">
         </div>
-          </div>
+      </div>
 
-          <div v-else-if="songsData.length === 0"
-            class="alert alert-info text-center">
-            Тут поки що пусто...
-          </div>
+      <div v-else-if="songsData.length === 0"
+        class="alert alert-info text-center">
+        Тут поки що пусто...
+      </div>
 
-          <div v-else-if="!searching && !loadingSongs">
-            <ul v-for="(group, i) in splitByPairs"
-              :key="i"
-              class="list-group">
-              <transition name="group-header"
-                duration="500"
-                appear>
-                <li v-if="groupHeader(i) !== null"
-                  :style="{ 'transition-delay': group[0].ordNum * 50 + 'ms' }"
-                  class="list-group-item bg-secondary text-light text-white text-center align-middle mt-3">
-                  <h3>
-                    <span class="material-icons align-middle">arrow_downward</span>
-                    {{groupHeader(i)}}
-                    <span class="material-icons align-middle">arrow_downward</span>
-                  </h3>
-                </li>
-              </transition>
-              <Track v-for="(song, j) in group"
+      <div v-else-if="!searching && !loadingSongs">
+        <ul v-for="(group, i) in splitByPairs"
+          :key="i"
+          class="list-group">
+          <transition name="group-header"
+            duration="500"
+            appear>
+            <li v-if="groupHeader(i) !== null"
+              :style="{ 'transition-delay': group[0].ordNum * 50 + 'ms' }"
+              class="list-group-item bg-secondary text-light text-white text-center align-middle mt-3">
+              <h3>
+                <span class="material-icons align-middle">arrow_downward</span>
+                {{groupHeader(i)}}
+                <span class="material-icons align-middle">arrow_downward</span>
+              </h3>
+            </li>
+          </transition>
+          <Track v-for="(song, j) in group"
             :index="song.ordNum"
             :songId="song.path"
             :key="j"
@@ -114,11 +114,11 @@
             :loadingSong="loadingSong"
             :currentSongId="currentSongId" />
         </ul>
-          </div>
+      </div>
 
-          <ul v-else-if="searching && songsDataFiltered.length > 0"
-            class="list-group">
-            <Track :index="i"
+      <ul v-else-if="searching && songsDataFiltered.length > 0"
+        class="list-group">
+        <Track :index="i"
           v-for="(song, i) in songsDataFiltered"
           :songId="song.path"
           :key="i"
@@ -126,44 +126,44 @@
           @play="loadSong(song.path, i)" />
       </ul>
 
-            <div v-else-if="searching"
-              class="alert alert-warning text-center">
-              Нічого не знайдено...
-            </div>
+      <div v-else-if="searching"
+        class="alert alert-warning text-center">
+        Нічого не знайдено...
+      </div>
 
-        </div>
-        <footer v-if="!loadingSongs"
-          class="footer pt-5 pb-4 text-center font-weight-bold">
-          <img src="../assets/kpi.png"
+    </div>
+    <footer v-if="!loadingSongs"
+      class="footer pt-5 pb-4 text-center font-weight-bold">
+      <img :src="kpiLogo"
         alt=""
         width="40"
         height="40"> Для КПИ by
-          <a href="https://t.me/svinerus">@svinerus</a>
-          &
-          <a href="https://t.me/kraftwerk28">@kraftwerk28</a>
-        </footer>
+      <a href="https://t.me/svinerus">@svinerus</a>
+      &
+      <a href="https://t.me/kraftwerk28">@kraftwerk28</a>
+    </footer>
 
-        <transition name="scrollup">
-          <button v-if="playerFixed"
-            class="scrollup btn btn-light"
-            @click="scrollUpFull">
-            <span>arrow_upward</span>
-          </button>
-        </transition>
-      </div>
+    <transition name="scrollup">
+      <button v-if="playerFixed"
+        class="scrollup btn btn-light"
+        @click="scrollUpFull">
+        <span>arrow_upward</span>
+      </button>
+    </transition>
+  </div>
 </template>
 
 <script>
 import Track from './Track.vue';
 import Player from './Player.vue';
 import Seeker from './ProgressSeeker.vue';
-import '../assets/kpi.png';
-import '../assets/ebalo-bota.png';
+import kpiLogo from '../assets/kpi.png';
+import ebaloBota from '../assets/ebalo-bota.png';
 
 import 'bootstrap';
-import $ from 'jquery';
+import 'jquery';
 
-Date.prototype.yyyymmdd = function () {
+Date.prototype.yyyymmdd = function() {
   let mm = this.getMonth() + 1; // getMonth() is zero-based
   let dd = this.getDate();
 
@@ -173,7 +173,7 @@ Date.prototype.yyyymmdd = function () {
   ].join('-');
 }
 
-Date.ms = function (str) { // YYYY-MM-DD
+Date.ms = function(str) { // YYYY-MM-DD
   // console.log(str.slice(0, 4), str.slice(5, 7), str.slice(8, 10));
   return new Date(+str.slice(0, 4), +str.slice(5, 7) - 1, +str.slice(8, 10));
 }
@@ -203,11 +203,14 @@ export default {
       songs: {},
       timePlaying: 0,
 
-      playerFixed: false
+      playerFixed: false,
+
+      kpiLogo,
+      ebaloBota,
     }
   },
   watch: {
-    paused: function (val) {
+    paused: function(val) {
       if (!val) this.currentSong.play()
       else this.currentSong.pause()
       if (!val) this.playerVisible = true;
@@ -421,6 +424,7 @@ export default {
   &::-webkit-scrollbar {
     display: none;
   }
+  overflow: hidden;
   > img {
     width: 100px;
     height: 100px;

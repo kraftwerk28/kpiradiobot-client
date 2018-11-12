@@ -22,14 +22,17 @@ const router = {
   },
   '\/$': (req, res) => {
     console.log('/index.html');
-    fs.readFile('./dist/index.html', 'utf8', (err, data) => {
+    fs.readFile(__dirname + '/dist/index.html', 'utf8', (err, data) => {
       res.end(data);
     });
   },
+  '\/.*\.png$': (req, res) => {
+    res.setHeader('Content-Type', 'image/png');
+  },
   '\/.*$': (req, res) => {
     console.log(req.url);
-    const path = './dist/' + req.url;
-    fs.readFile(path, 'utf8', (err, data) => {
+    const path = '/dist' + req.url;
+    fs.readFile(__dirname + path, 'utf8', (err, data) => {
       res.end(data);
     });
   }
@@ -49,7 +52,7 @@ function getPostData(request) {
 const server = http.createServer((req, res) => {
   if (req.url.startsWith('/krb')) {
     console.log('proxying...');
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'kraftwer28.pp.ua');
     res.setHeader('Access-Control-Request-Method', '*');
     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
     res.setHeader('Access-Control-Allow-Headers', 'content-type');

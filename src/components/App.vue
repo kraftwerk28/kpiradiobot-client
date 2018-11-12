@@ -423,8 +423,8 @@ export default {
   margin: auto;
   &::-webkit-scrollbar {
     display: none;
-  }
-  overflow: hidden;
+  }  
+  overflow: visible;
   > img {
     width: 100px;
     height: 100px;

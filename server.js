@@ -23,16 +23,22 @@ const router = {
   '\/$': (req, res) => {
     console.log('/index.html');
     fs.readFile(__dirname + '/dist/index.html', 'utf8', (err, data) => {
+      res.statusCode = 200;
       res.end(data);
     });
   },
   '\/.*\.png$': (req, res) => {
     res.setHeader('Content-Type', 'image/png');
+    fs.readFile(__dirname + '/dist' + req.url, (err, data) => {
+      res.statusCode = 200;
+      res.end(data);
+    })
   },
   '\/.*$': (req, res) => {
     console.log(req.url);
     const path = '/dist' + req.url;
     fs.readFile(__dirname + path, 'utf8', (err, data) => {
+      res.statusCode = 200;
       res.end(data);
     });
   }

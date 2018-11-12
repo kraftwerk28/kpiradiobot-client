@@ -11,7 +11,7 @@ const router = {
     });
   },
   '\/session$': (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://kraftwerk28.pp.ua');
     res.setHeader('Access-Control-Request-Method', '*');
     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
     res.setHeader('Access-Control-Allow-Headers', '*');
@@ -58,7 +58,7 @@ function getPostData(request) {
 const server = http.createServer((req, res) => {
   if (req.url.startsWith('/krb')) {
     console.log('proxying...');
-    res.setHeader('Access-Control-Allow-Origin', 'kraftwer28.pp.ua');
+    res.setHeader('Access-Control-Allow-Origin', 'http://kraftwerk28.pp.ua');
     res.setHeader('Access-Control-Request-Method', '*');
     res.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET');
     res.setHeader('Access-Control-Allow-Headers', 'content-type');

@@ -279,7 +279,7 @@ export default {
       kpiLogo,
       ebaloBota,
 
-      dark: true,
+      dark: false,
     }
   },
   watch: {

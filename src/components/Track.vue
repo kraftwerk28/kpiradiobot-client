@@ -1,11 +1,19 @@
 <template>
-  <transition name="track-li"
+  <transition
+    name="track-li"
     mode="out-in"
     duration="500"
-    appear>
-    <li class="list-group-item d-flex justify-content-between align-items-center"
-      :class="{ 'bg-light': currentSongId === songId }"
-      :style="style">
+    appear
+  >
+
+    <!-- root -->
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center"
+      :class="darkcl ? 'bg-dark text-white' : 'bg-light text-dark'"
+      :style="style"
+    >
+
+      <!-- time badge -->
       <span class="badge badge-dark">
         <span>
           {{playTime[0] + '-'}}
@@ -15,9 +23,12 @@
         </span>
       </span>
 
+      <!-- song info -->
       <div class="head-scroll">
-        <h6 v-if="songInfo.artist.length"
-          class="text-secondary d-inline">
+        <h6
+          v-if="songInfo.artist.length"
+          class="text-secondary d-inline"
+        >
           {{songArtist}} —
         </h6>
         <h5 class="text-nowrap d-inline">
@@ -26,33 +37,44 @@
         <div></div>
       </div>
 
-      <a class="btn btn-secondary btn-sm p-0 border-dark mr-1"
+      <a
+        class="btn btn-secondary btn-sm p-0 border-dark mr-1"
         role="button"
         title="Завантажити"
         :href="'/krb/history/play2/' + songId"
-        :download="songId + '.mp3'">
+        :download="songId + '.mp3'"
+      >
         <span class="medium material-icons align-middle">file_download</span>
       </a>
-      <a class="btn btn-secondary btn-sm p-0 telegram-logo border-dark mr-1"
+
+      <a
+        class="btn btn-secondary btn-sm p-0 telegram-logo border-dark mr-1"
         role="button"
         title="відкрити в Telegram"
-        :href="'https://telegram.me/kpiradio_bot?start=' + songId">
+        :href="'https://telegram.me/kpiradio_bot?start=' + songId"
+      >
         <span class="medium material-icons align-middle">file_download</span>
       </a>
-      <button class="btn btn-primary"
+
+      <button
+        class="btn btn-primary"
         @click="$emit('play')"
-        title="Грати цю пісню">
+        title="Грати цю пісню"
+      >
         <span v-if="!paused && currentSongId === songId">
           pause
         </span>
-        <span v-else-if="loadingSong && currentSongId === songId"
-          class="loader">
+        <span
+          v-else-if="loadingSong && currentSongId === songId"
+          class="loader"
+        >
           autorenew
         </span>
         <span v-else>
           play_arrow
         </span>
       </button>
+
     </li>
   </transition>
 </template>
@@ -72,6 +94,7 @@ export default {
     paused: Boolean,
     loadingSong: Boolean,
     currentSongId: String || Number,
+    darkcl: Boolean,
   },
   computed: {
     playTime() {
@@ -92,6 +115,11 @@ export default {
       return decodeURI(this.songInfo.artist);
     }
   },
+  watch: {
+    darkcl(val) {
+      console.log(val);
+    }
+  },
   mounted() {
   }
 }
@@ -103,12 +131,13 @@ export default {
 .track-li-enter-active,
 .track-li-leave-active {
   transition: transform 0.5s, opacity 0.5s;
+  transform-origin: top left;
 }
 
 .track-li-enter,
 .track-li-leave-to {
   opacity: 0;
-  transform: translateY(-50px) scale(1.5);
+  transform: translateY(-50px);
 }
 
 li {

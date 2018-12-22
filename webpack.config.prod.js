@@ -45,7 +45,11 @@ module.exports = {
     new HWP({
       template: './src/index.html',
       inject: 'body',
-      minify: true
+      minify: {
+        collapseWhitespace: true,
+        removeComments: true,
+      },
+      favicon: './src/assets/ebalo-bota.png'
     }),
     new cssExtracter({
       filename: '[name].css'

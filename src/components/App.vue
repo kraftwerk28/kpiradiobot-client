@@ -1,27 +1,38 @@
 <template>
-  <div class="container-fluid p-0">
-    <div id="loadIndicator"
+  <div class="container-fluid p-0" :class="dark ? 'bg-dark' : 'bg-white'">
+
+    <!-- @deprecated load indicator -->
+    <div
+      id="loadIndicator"
       class="progress bg-transparent"
-      v-show="loadProgress > 0">
-      <div class="progress-bar bg-danger"
+      v-show="loadProgress > 0"
+    >
+      <div
+        class="progress-bar bg-danger"
         role="progressbar"
-        :style="{ width: loadProgress + '%' }">
+        :style="{ width: loadProgress + '%' }"
+      >
       </div>
     </div>
 
-    <nav class="navbar navbar-dark bg-primary pt-2">
+
+    <!-- top bar with player -->
+    <nav class="navbar navbar-dark pt-2" :class="dark ? 'bg-warning' : 'bg-primary'"
+    >
       <div class="dropdown">
-        <div class="navbar-brand"
+        <div
+          class="navbar-brand"
           data-toggle="dropdown"
-          title="Developed by @kraftwerk28">
+          title="Developed by @kraftwerk28"
+        >
           KPIRADIOBOT
         </div>
         <div class="dropdown-menu">
           <a href="https://t.me/kpiradio_bot">Telegram bot</a>
         </div>
       </div>
-
-      <Player :paused="paused"
+      <Player
+        :paused="paused"
         v-show="playerVisible"
         :songTitle="songName"
         @toggle-play="togglePlay"
@@ -33,70 +44,106 @@
         @toggle-volume="toggleVolume"
         @prev-track="prevTrack"
         @next-track="nextTrack"
-        :playerFixed="playerFixed" />
+        :playerFixed="playerFixed"
+      />
     </nav>
 
-    <div id="tracks"
-      class="pl-2 pr-2">
-      <div class="row mt-2 mb-2">
-        <div class="input-group col-md-4"
-          title="Виберіть день">
+
+    <!-- tracks container -->
+    <div
+      id="tracks"
+      class="pl-2 pr-2"
+    >
+      <!-- Date, search field -->
+      <div class="row mt-2 mb-2 above-tracks">
+        <div
+          class="input-group col-md-4"
+          title="Виберіть день"
+        >
           <div class="input-group-prepend">
             <span class="input-group-text material-icons">date_range</span>
           </div>
-          <input type="date"
+          <input
+            type="date"
             :value="new Date(timeStamp).yyyymmdd()"
             :max="new Date().yyyymmdd()"
             @change="setTimeStamp($event)"
-            class="form-control" />
+            class="form-control"
+          />
         </div>
 
-        <div class="input-group col-md-8">
-          <input type="text"
+        <div class="input-group col-md-7">
+          <input
+            type="text"
             :disabled="searching"
             placeholder="пошук"
             class="form-control"
             v-model="searchPattern"
-            @keyup.enter="searching = true">
+            @keyup.enter="searching = true"
+          >
           <div class="input-group-append">
-            <button class="btn"
+            <button
+              class="btn"
               :disabled="searchPattern.length < 1"
               @click="searching = !searching"
-              :class="{ 'btn-outline-secondary': !searching, 'btn-danger': searching }">
+              :class="{ 'btn-outline-secondary': !searching, 'btn-danger': searching }"
+            >
               <span v-if="searching">close</span>
               <span v-else>search</span>
             </button>
           </div>
         </div>
+
+        <button
+          @click="toggleTheme"
+          class="btn"
+          :class="dark ? 'btn-outline-light' : 'btn-outline-dark'"
+        ><span>palette</span></button>
       </div>
 
-      <div v-if="loadingSongs"
+      <!-- shown while loading songs -->
+      <div
+        v-if="loadingSongs"
         class="text-center"
-        style="text-align: -webkit-center;">
+        style="text-align: -webkit-center;"
+      >
         <div class="alert alert-dark">
           Завантаження...
         </div>
         <div class="spin-loader">
-          <img :src="ebaloBota"
-            alt="">
+          <img
+            :src="ebaloBota"
+            alt=""
+          >
         </div>
       </div>
 
-      <div v-else-if="songsData.length === 0"
-        class="alert alert-info text-center">
+      <!-- shown if nothing played yet -->
+      <div
+        v-else-if="songsData.length === 0"
+        class="alert alert-info text-center"
+      >
         Тут поки що пусто...
+        <button class="btn btn-info">Перейти до вчорашнього списку</button>
       </div>
 
+
       <div v-else-if="!searching && !loadingSongs">
-        <ul v-for="(group, i) in splitByPairs"
+        <ul
+          v-for="(group, i) in splitByPairs"
           :key="i"
-          class="list-group">
-          <transition name="group-header"
+          class="list-group"
+        >
+          <transition
+            name="group-header"
             duration="500"
-            appear>
-            <li v-if="groupHeader(i) !== null"
+            appear
+          >
+            <li
+              v-if="groupHeader(i) !== null"
               :style="{ 'transition-delay': group[0].ordNum * 50 + 'ms' }"
-              class="list-group-item bg-secondary text-light text-white text-center align-middle mt-3">
+              class="list-group-item bg-secondary text-light text-white text-center align-middle mt-3"
+            >
               <h3>
                 <span class="material-icons align-middle">arrow_downward</span>
                 {{groupHeader(i)}}
@@ -104,7 +151,9 @@
               </h3>
             </li>
           </transition>
-          <Track v-for="(song, j) in group"
+          <Track
+            :darkcl="dark"
+            v-for="(song, j) in group"
             :index="song.ordNum"
             :songId="song.path"
             :key="j"
@@ -112,44 +161,66 @@
             @play="loadSong(song.path, j)"
             :paused="paused"
             :loadingSong="loadingSong"
-            :currentSongId="currentSongId" />
+            :currentSongId="currentSongId"
+          />
         </ul>
       </div>
 
-      <ul v-else-if="searching && songsDataFiltered.length > 0"
-        class="list-group">
-        <Track :index="i"
+      <!-- [SEARCH] shows searched sounds -->
+      <ul
+        v-else-if="searching && songsDataFiltered.length > 0"
+        class="list-group"
+      >
+        <Track
+          :darkcl="dark"
           v-for="(song, i) in songsDataFiltered"
-          :songId="song.path"
           :key="i"
+          :index="i"
+          :songId="song.path"
           :songInfo="song"
-          @play="loadSong(song.path, i)" />
+          @play="loadSong(song.path, i)"
+        />
       </ul>
 
-      <div v-else-if="searching"
-        class="alert alert-warning text-center">
+      <!-- [SEARCH] shown if no search results -->
+      <div
+        v-else-if="searching"
+        class="alert alert-warning text-center"
+      >
         Нічого не знайдено...
       </div>
 
     </div>
-    <footer v-if="!loadingSongs"
-      class="footer pt-5 pb-4 text-center font-weight-bold">
-      <img :src="kpiLogo"
+
+
+    <!-- footer with dev info -->
+    <footer
+      v-if="!loadingSongs"
+      class="footer pt-5 pb-4 text-center font-weight-bold"
+    >
+      <img
+        :src="kpiLogo"
         alt=""
         width="40"
-        height="40"> Для КПИ by
+        height="40"
+      > Для КПИ by
       <a href="https://t.me/svinerus">@svinerus</a>
-      &
+      &amp;
       <a href="https://t.me/kraftwerk28">@kraftwerk28</a>
     </footer>
 
+
+    <!-- scrollup button -->
     <transition name="scrollup">
-      <button v-if="playerFixed"
+      <button
+        v-if="playerFixed"
         class="scrollup btn btn-light"
-        @click="scrollUpFull">
+        @click="scrollUpFull"
+      >
         <span>arrow_upward</span>
       </button>
     </transition>
+
   </div>
 </template>
 
@@ -207,6 +278,8 @@ export default {
 
       kpiLogo,
       ebaloBota,
+
+      dark: true,
     }
   },
   watch: {
@@ -328,6 +401,9 @@ export default {
       this.musicPlaying = false;
       this.playerVisible = false;
     },
+    toggleTheme() {
+      this.dark = !this.dark;
+    },
 
     prevTrack() {
       const ind = this.songsData.findIndex(song => song.path === this.currentSongId);
@@ -415,6 +491,14 @@ export default {
   }
 }
 
+.above-tracks {
+  display: flex;
+  &:nth-child(1),
+  &:nth-child(2) {
+    flex: 1;
+  }
+}
+
 #tracks {
   overflow-x: hidden;
 }
@@ -423,7 +507,7 @@ export default {
   margin: auto;
   &::-webkit-scrollbar {
     display: none;
-  }  
+  }
   overflow: visible;
   > img {
     width: 100px;

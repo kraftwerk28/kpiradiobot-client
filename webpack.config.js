@@ -3,8 +3,8 @@
 const { VueLoaderPlugin } = require('vue-loader');
 const HWP = require('html-webpack-plugin');
 
-module.exports = (env) => ({
-  mode: 'development',
+const config = {
+  mode: 'production',
   entry: './src/main.js',
   output: {
     path: __dirname + '/dist',
@@ -43,20 +43,45 @@ module.exports = (env) => ({
     new HWP({
       template: './src/index.dev.html',
       inject: 'body',
-      minify: true
+      favicon: './src/assets/ebalo-bota.png'
     }),
   ],
-  devtool: 'source-map',
-  devServer: {
-    host: '0.0.0.0',
-    port: '8081',
-    overlay: true,
-    stats: 'minimal',
-    proxy: {
-      '/krb': {
-        target: 'http://kpiradiobot.ga',
-        pathRewrite: { '^/krb': '' }
+
+};
+
+module.exports = env => {
+  const dev = env.delevopment;
+
+  if (dev) {
+    config.devtool = 'source-map';
+    config.devServer = {
+      host: '0.0.0.0',
+      port: '8081',
+      overlay: true,
+      stats: 'minimal',
+      proxy: {
+        '/krb': {
+          target: 'http://kpiradiobot.ga',
+          pathRewrite: { '^/krb': '' }
+        }
       }
-    }
+    };
+    config.mode = 'development';
+
+  } else {
+    const cssExtracter = require('mini-css-extract-plugin');
+    const cssOptimizer = require('optimize-css-assets-webpack-plugin');
+
+    config.plugins.push(
+      new cssExtracter({
+        filename: '[name].css'
+      }),
+      new cssOptimizer({})
+    );
+    config.module.rules[3].use[0] = cssExtracter.loader;
   }
-});
+
+  console.dir(config);
+
+  return config;
+};

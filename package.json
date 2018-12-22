@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack-dev-server --config ./webpack.config.dev.js",
-    "build": "webpack --config ./webpack.config.prod.js",
+    "dev": "webpack-dev-server --env.delevopment --hot",
+    "build": "webpack --env.production",
     "server": "node server.js"
   },
   "repository": {
